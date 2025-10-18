@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+._*
+
+# Gradle
+.gradle/
+build/
+local.properties
+
+# IntelliJ
+*.iml
+.idea/
+out/
+
+# Android
+captures/
+.externalNativeBuild/
+
+# VSCode
+bin/
