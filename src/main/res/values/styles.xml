@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+  <style name="Theme.TwinMind" parent="Theme.Material3.Light.NoActionBar">
+    <item name="colorPrimary">@color/blue</item>
+    <item name="colorSecondary">@color/orange</item>
+  </style>
+
+  <style name="Widget.Main.FloatingButton" parent="Widget.Material3.ExtendedFloatingActionButton.Primary">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_margin">32dp</item>
+    <item name="android:textColor">@android:color/white</item>
+    <item name="backgroundTint">?colorSecondary</item>
+    <item name="iconTint">@android:color/white</item>
+    <item name="layout_anchor">@id/container</item>
+    <item name="layout_anchorGravity">bottom|end</item>
+  </style>
+
+  <style name="Widget.Main.NavigationIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+    <item name="android:color">?colorSecondary</item>
+  </style>
+
+  <style name="Widget.Main.ToolbarContainer" parent="Widget.Material3.Toolbar">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:paddingEnd">8dp</item>
+    <item name="android:orientation">horizontal</item>
+  </style>
+
+  <style name="Widget.Main.Toolbar" parent="Widget.Material3.Toolbar">
+    <item name="android:layout_width">0dp</item>
+    <item name="android:layout_height">?actionBarSize</item>
+    <item name="android:layout_weight">1</item>
+  </style>
+
+  <style name="Widget.Main.LauncherImage" parent="android:Widget">
+    <item name="android:layout_width">?actionBarSize</item>
+    <item name="android:layout_height">?actionBarSize</item>
+    <item name="android:layout_gravity">start</item>
+    <item name="android:padding">8dp</item>
+    <item name="android:src">@drawable/ic_launcher</item>
+    <item name="riv_corner_radius">?actionBarSize</item>
+  </style>
+
+  <style name="Widget.Main.ProfileImage" parent="android:Widget">
+    <item name="android:layout_width">?actionBarSize</item>
+    <item name="android:layout_height">?actionBarSize</item>
+    <item name="android:layout_gravity">center|end</item>
+    <item name="android:padding">16dp</item>
+    <item name="android:src">@drawable/pic_profile</item>
+    <item name="riv_corner_radius">?actionBarSize</item>
+  </style>
+
+  <style name="Widget.Notes.DateText" parent="Widget.AppCompat.TextView">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_margin">16dp</item>
+    <item name="android:textAppearance">@style/TextAppearance.Material3.LabelLarge</item>
+    <item name="android:textColor">?colorPrimary</item>
+  </style>
+
+  <style name="Widget.Notes.Text" parent="Widget.AppCompat.TextView">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textAppearance">@style/TextAppearance.Material3.BodyMedium</item>
+    <item name="android:lineHeight">14dp</item>
+  </style>
+
+  <style name="Widget.Notes.GroupCard" parent="Widget.Material3.CardView.Filled">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_margin">8dp</item>
+    <item name="cardCornerRadius">16dp</item>
+    <item name="cardElevation">4dp</item>
+    <item name="cardBackgroundColor">@android:color/white</item>
+  </style>
+
+  <style name="Widget.Notes.GroupContainer" parent="android:Widget">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:paddingStart">16dp</item>
+    <item name="android:paddingTop">16dp</item>
+    <item name="android:paddingEnd">16dp</item>
+    <item name="android:paddingBottom">8dp</item>
+  </style>
+
+  <style name="Widget.Notes.GroupText" parent="Widget.AppCompat.TextView">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginBottom">8dp</item>
+    <item name="android:lineHeight">16dp</item>
+    <item name="android:textAppearance">@style/TextAppearance.Material3.TitleMedium</item>
+  </style>
+
+  <style name="Widget.Notes.ListText" parent="Widget.Material3.CardView.Filled">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:textAppearance">@style/TextAppearance.Material3.BodyMedium</item>
+  </style>
+
+  <style name="Widget.Notes.CategoryChip" parent="Widget.Material3.Chip.Assist">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textAppearance">@style/TextAppearance.Material3.LabelMedium</item>
+    <item name="android:textColor">?colorPrimary</item>
+    <item name="chipBackgroundColor">@android:color/transparent</item>
+    <item name="chipSurfaceColor">@android:color/transparent</item>
+    <item name="chipStrokeColor">?colorPrimary</item>
+    <item name="chipStartPadding">0dp</item>
+    <item name="chipEndPadding">0dp</item>
+    <item name="chipCornerRadius">16dp</item>
+  </style>
+
+  <style name="Widget.Notes.AttachmentContainer" parent="android:Widget">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:gravity">center_vertical</item>
+    <item name="android:orientation">horizontal</item>
+  </style>
+
+  <style name="Widget.Notes.AttachmentImage" parent="android:Widget">
+    <item name="android:layout_width">18dp</item>
+    <item name="android:layout_height">18dp</item>
+    <item name="android:layout_gravity">top</item>
+    <item name="android:layout_marginEnd">4dp</item>
+    <item name="tint">?colorSecondary</item>
+  </style>
+
+  <style name="Widget.Notes.AttachmentText" parent="android:Widget">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textAppearance">@style/TextAppearance.Material3.BodySmall</item>
+    <item name="android:textColor">?colorSecondary</item>
+  </style>
+
+  <style name="Widget.Search.CheckImage" parent="Widget.Material3.CardView.Filled">
+    <item name="android:layout_width">24dp</item>
+    <item name="android:layout_height">24dp</item>
+    <item name="android:layout_marginEnd">8dp</item>
+    <item name="android:layout_marginTop">2dp</item>
+    <item name="layout_column">0</item>
+  </style>
+
+  <style name="Widget.Search.CheckText" parent="Widget.Material3.CardView.Filled">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:textAppearance">@style/TextAppearance.Material3.BodyMedium</item>
+    <item name="layout_column">1</item>
+  </style>
+
+  <style name="Widget.Todo.ItemCard" parent="Widget.Material3.CardView.Filled">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_margin">8dp</item>
+    <item name="cardCornerRadius">8dp</item>
+    <item name="cardElevation">2dp</item>
+    <item name="cardBackgroundColor">@android:color/white</item>
+  </style>
+
+  <style name="Widget.Todo.ItemContainer" parent="android:Widget">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:orientation">horizontal</item>
+    <item name="android:paddingTop">8dp</item>
+    <item name="android:paddingEnd">8dp</item>
+    <item name="android:paddingBottom">8dp</item>
+  </style>
+
+  <style name="Widget.Todo.ItemCheck" parent="android:Widget">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginStart">8dp</item>
+    <item name="android:layout_marginEnd">8dp</item>
+  </style>
+
+  <style name="Widget.Todo.ItemText" parent="android:Widget">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:textAppearance">@style/TextAppearance.Material3.BodyLarge</item>
+  </style>
+</resources>

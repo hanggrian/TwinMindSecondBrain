@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <!-- https://twinmind.com/ -->
+  <item name="blue" type="color">#0B4F75</item>
+  <item name="orange" type="color">#F27128</item>
+</resources>

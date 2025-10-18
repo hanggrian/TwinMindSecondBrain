@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context=".ChatsFragment">
+
+  <com.google.android.material.appbar.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout style="@style/Widget.Main.ToolbarContainer">
+
+      <androidx.appcompat.widget.Toolbar
+        style="@style/Widget.Main.Toolbar"
+        app:menu="@menu/fragment_chats">
+
+        <com.makeramen.roundedimageview.RoundedImageView style="@style/Widget.Main.LauncherImage"/>
+      </androidx.appcompat.widget.Toolbar>
+
+      <com.makeramen.roundedimageview.RoundedImageView style="@style/Widget.Main.ProfileImage"/>
+    </LinearLayout>
+  </com.google.android.material.appbar.AppBarLayout>
+
+  <LinearLayout
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <TextView
+      style="@style/Widget.Notes.DateText"
+      android:text="Tuesday, Oct 14"/>
+
+    <ListView
+      android:id="@+id/list1"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"/>
+
+    <TextView
+      style="@style/Widget.Notes.DateText"
+      android:text="Wednesday, Oct 15"/>
+
+    <ListView
+      android:id="@+id/list2"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"/>
+
+    <TextView
+      style="@style/Widget.Notes.DateText"
+      android:text="Friday, Oct 16"/>
+
+    <ListView
+      android:id="@+id/list3"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"/>
+  </LinearLayout>
+
+  <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    style="@style/Widget.Main.FloatingButton"
+    android:text="Ask"
+    app:icon="@drawable/outline_ask"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

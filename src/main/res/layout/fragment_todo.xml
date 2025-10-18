@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context=".TodoFragment">
+
+  <com.google.android.material.appbar.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout style="@style/Widget.Main.ToolbarContainer">
+
+      <androidx.appcompat.widget.Toolbar
+        style="@style/Widget.Main.Toolbar"
+        app:menu="@menu/fragment_todo">
+
+        <com.makeramen.roundedimageview.RoundedImageView style="@style/Widget.Main.LauncherImage"/>
+      </androidx.appcompat.widget.Toolbar>
+
+      <com.makeramen.roundedimageview.RoundedImageView style="@style/Widget.Main.ProfileImage"/>
+    </LinearLayout>
+  </com.google.android.material.appbar.AppBarLayout>
+
+  <LinearLayout
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <TextView
+      style="@style/Widget.Notes.DateText"
+      android:text="Today"/>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="8dp"
+      android:orientation="vertical">
+
+      <androidx.cardview.widget.CardView style="@style/Widget.Todo.ItemCard">
+
+        <LinearLayout style="@style/Widget.Todo.ItemContainer">
+
+          <CheckBox style="@style/Widget.Todo.ItemCheck"/>
+
+          <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+              style="@style/Widget.Todo.ItemText"
+              android:text="How to choose the right canvas for building"/>
+
+            <LinearLayout
+              style="@style/Widget.Notes.AttachmentContainer"
+              android:layout_marginTop="4dp">
+
+              <ImageView
+                style="@style/Widget.Notes.AttachmentImage"
+                android:src="@drawable/outline_file"/>
+
+              <TextView
+                style="@style/Widget.Notes.AttachmentText"
+                android:text="Brand Guidelines.pdf"/>
+            </LinearLayout>
+          </LinearLayout>
+        </LinearLayout>
+      </androidx.cardview.widget.CardView>
+
+      <androidx.cardview.widget.CardView style="@style/Widget.Todo.ItemCard">
+
+        <LinearLayout style="@style/Widget.Todo.ItemContainer">
+
+          <CheckBox style="@style/Widget.Todo.ItemCheck"/>
+
+          <TextView
+            style="@style/Widget.Todo.ItemText"
+            android:text="Prepare webinar: How to choose the right canvas for building the right product"/>
+        </LinearLayout>
+      </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+    <TextView
+      style="@style/Widget.Notes.DateText"
+      android:text="Tomorrow"/>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="8dp"
+      android:orientation="vertical">
+
+      <androidx.cardview.widget.CardView style="@style/Widget.Todo.ItemCard">
+
+        <LinearLayout style="@style/Widget.Todo.ItemContainer">
+
+          <CheckBox style="@style/Widget.Todo.ItemCheck"/>
+
+          <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+              style="@style/Widget.Todo.ItemText"
+              android:text="Book flight tickets to Paris"/>
+
+            <LinearLayout
+              style="@style/Widget.Notes.AttachmentContainer"
+              android:layout_marginTop="4dp">
+
+              <ImageView
+                style="@style/Widget.Notes.AttachmentImage"
+                android:src="@drawable/outline_alarm"/>
+
+              <TextView
+                style="@style/Widget.Notes.AttachmentText"
+                android:text="Oct 20, 8:00 AM"/>
+            </LinearLayout>
+          </LinearLayout>
+        </LinearLayout>
+      </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+    <TextView
+      style="@style/Widget.Notes.DateText"
+      android:text="Upcoming"/>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="8dp"
+      android:orientation="vertical">
+
+      <androidx.cardview.widget.CardView style="@style/Widget.Todo.ItemCard">
+
+        <LinearLayout style="@style/Widget.Todo.ItemContainer">
+
+          <CheckBox style="@style/Widget.Todo.ItemCheck"/>
+
+          <TextView
+            style="@style/Widget.Todo.ItemText"
+            android:text="'Under a White Sky: The Nature of Future' by Elizabeth Kolbert"/>
+        </LinearLayout>
+      </androidx.cardview.widget.CardView>
+
+      <androidx.cardview.widget.CardView style="@style/Widget.Todo.ItemCard">
+
+        <LinearLayout style="@style/Widget.Todo.ItemContainer">
+
+          <CheckBox style="@style/Widget.Todo.ItemCheck"/>
+
+          <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+              style="@style/Widget.Todo.ItemText"
+              android:text="Best platforms to build your own website"/>
+
+            <LinearLayout
+              style="@style/Widget.Notes.AttachmentContainer"
+              android:layout_marginTop="4dp">
+
+              <ImageView
+                style="@style/Widget.Notes.AttachmentImage"
+                android:src="@drawable/outline_comment"/>
+
+              <TextView
+                style="@style/Widget.Notes.AttachmentText"
+                android:text="2 comments"/>
+            </LinearLayout>
+          </LinearLayout>
+        </LinearLayout>
+      </androidx.cardview.widget.CardView>
+    </LinearLayout>
+  </LinearLayout>
+
+  <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    style="@style/Widget.Main.FloatingButton"
+    android:text="Add"
+    app:icon="@drawable/outline_add"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

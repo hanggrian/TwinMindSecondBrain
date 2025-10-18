@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  app:startDestination="@id/notesFragment">
+
+  <fragment
+    android:id="@+id/notesFragment"
+    android:name="com.twinmind.brain.NotesFragment"
+    android:label="Notes"
+    tools:layout="@layout/fragment_notes">
+
+    <action
+      android:id="@+id/notesToChatsAction"
+      app:destination="@id/chatsFragment"/>
+
+    <action
+      android:id="@+id/notesToSearchAction"
+      app:destination="@id/searchFragment"/>
+
+    <action
+      android:id="@+id/notesToTodoAction"
+      app:destination="@id/todoFragment"/>
+  </fragment>
+
+  <fragment
+    android:id="@+id/chatsFragment"
+    android:name="com.twinmind.brain.ChatsFragment"
+    android:label="Chats"
+    tools:layout="@layout/fragment_chats">
+
+    <action
+      android:id="@+id/chatsToNotesAction"
+      app:destination="@id/notesFragment"/>
+
+    <action
+      android:id="@+id/chatsToSearchAction"
+      app:destination="@id/searchFragment"/>
+
+    <action
+      android:id="@+id/chatsToTodoAction"
+      app:destination="@id/todoFragment"/>
+  </fragment>
+
+  <fragment
+    android:id="@+id/searchFragment"
+    android:name="com.twinmind.brain.SearchFragment"
+    android:label="Search"
+    tools:layout="@layout/fragment_search">
+
+    <action
+      android:id="@+id/searchToNotesAction"
+      app:destination="@id/notesFragment"/>
+
+    <action
+      android:id="@+id/searchToChatsAction"
+      app:destination="@id/chatsFragment"/>
+
+    <action
+      android:id="@+id/searchToTodoAction"
+      app:destination="@id/todoFragment"/>
+  </fragment>
+
+  <fragment
+    android:id="@+id/todoFragment"
+    android:name="com.twinmind.brain.TodoFragment"
+    android:label="To-do"
+    tools:layout="@layout/fragment_todo">
+
+    <action
+      android:id="@+id/todoToNotesAction"
+      app:destination="@id/notesFragment"/>
+
+    <action
+      android:id="@+id/todoToChatsAction"
+      app:destination="@id/chatsFragment"/>
+
+    <action
+      android:id="@+id/todoToSearchAction"
+      app:destination="@id/searchFragment"/>
+  </fragment>
+</navigation>

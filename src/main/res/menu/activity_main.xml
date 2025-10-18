@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <item
+    android:id="@+id/notesMenu"
+    android:icon="@drawable/fill_notes"
+    android:title="Notes"/>
+
+  <item
+    android:id="@+id/chatsMenu"
+    android:icon="@drawable/fill_chats"
+    android:title="Chats"/>
+
+  <item
+    android:id="@+id/searchMenu"
+    android:icon="@drawable/fill_search"
+    android:title="Search"/>
+
+  <item
+    android:id="@+id/todoMenu"
+    android:icon="@drawable/fill_todo"
+    android:title="To-do"/>
+
+  <item
+    android:id="@+id/digestMenu"
+    android:icon="@drawable/fill_digest"
+    android:title="Digest"/>
+</menu>

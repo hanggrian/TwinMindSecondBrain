@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+  <style name="Theme.TwinMind" parent="Theme.Material3.Light.NoActionBar">
+    <item name="colorPrimary">@color/blue</item>
+    <item name="colorSecondary">@color/orange</item>
+    <item name="android:windowLightStatusBar">true</item>
+  </style>
+</resources>

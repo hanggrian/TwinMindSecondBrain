@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  tools:context=".MainActivity"
+  tools:ignore="Overdraw,HardcodedText,ContentDescription,TooManyViews">
+
+  <androidx.fragment.app.FragmentContainerView
+    android:id="@+id/container"
+    android:name="androidx.navigation.fragment.NavHostFragment"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:paddingTop="32dp"
+    app:navGraph="@navigation/activity_main"/>
+
+  <com.google.android.material.bottomnavigation.BottomNavigationView
+    android:id="@+id/navigation"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:itemActiveIndicatorStyle="@style/Widget.Main.NavigationIndicator"
+    app:itemIconTint="@color/st_bottomnav_icon"
+    app:itemTextColor="@color/st_bottomnav_text"
+    app:labelVisibilityMode="labeled"
+    app:layout_anchorGravity="bottom"
+    app:menu="@menu/activity_main"/>
+</LinearLayout>

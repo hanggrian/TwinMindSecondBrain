@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <item
+    android:icon="@drawable/outline_gridview"
+    android:title="View"
+    app:showAsAction="always"/>
+  <item
+    android:icon="@drawable/outline_insights"
+    android:title="Insights"
+    app:showAsAction="always"/>
+</menu>
