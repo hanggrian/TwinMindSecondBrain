@@ -6,7 +6,7 @@
 
 * {
   --primary: #F27128;
-  --secondary: #44503b;
+  --secondary: #FF9A5C;
 
   --on-primary: #fff;
 
@@ -202,13 +202,13 @@ header ul:before {
   box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0, inset rgba(255, 255, 255, 0.7) 0 -1px 0; */
 }
 header ul li {
-  width: 0px;
+  width: 118px;
   float: left;
   border-right: 1px solid /*#3A7cbe*/ var(--secondary);
   height: 38px;
 }
 header ul li + li {
-  width: 0px;
+  width: 118px;
   border-left: 1px solid /*8bbef3*/ var(--secondary);
 }
 header ul li + li + li {

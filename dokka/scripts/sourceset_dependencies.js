@@ -1,0 +1,1 @@
+sourceset_dependencies = '{":transcription/debug":[],":transcription/main":[],":transcription/release":[]}'

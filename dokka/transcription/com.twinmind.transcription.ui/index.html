@@ -1,0 +1,354 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>com.twinmind.transcription.ui</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../index.html" tabindex="1">
+                    website
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">1
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":transcription/debug">debug</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":transcription/main">androidJvm</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":transcription/release">release</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":transcription/debug" data-filter=":transcription/debug">
+                                <span class="checkbox--icon"></span>
+                                debug
+                            </label>
+                        </li>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":transcription/main" data-filter=":transcription/main">
+                                <span class="checkbox--icon"></span>
+                                androidJvm
+                            </label>
+                        </li>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":transcription/release" data-filter=":transcription/release">
+                                <span class="checkbox--icon"></span>
+                                release
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    website
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="transcription::com.twinmind.transcription.ui////PointingToDeclaration//2023538857">
+  <div class="breadcrumbs"><a href="../index.html">transcription</a><span class="delimiter">/</span><span class="current">com.twinmind.transcription.ui</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="1248107%2FClasslikes%2F1445143180" anchor-label="Hilt_MainActivity" id="1248107%2FClasslikes%2F1445143180" data-filterable-set=":transcription/debug,:transcription/release"></a>
+          <div class="table-row table-row_content" data-filterable-current=":transcription/debug,:transcription/release" data-filterable-set=":transcription/debug,:transcription/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../transcription/com.twinmind.transcription.ui/[release]-hilt_-main-activity/index.html"><span>Hilt_</span><wbr><span>Main</span><wbr><span><span>Activity</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1248107%2FClasslikes%2F1445143180"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":transcription/debug" data-filterable-set=":transcription/debug" data-active="" data-toggle=":transcription/debug">debug</button><button class="platform-bookmark" data-filterable-current=":transcription/release" data-filterable-set=":transcription/release" data-toggle=":transcription/release">release</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":transcription/debug"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="[debug]-hilt_-main-activity/index.html">Hilt_MainActivity</a> : <a href="https://developer.android.com/reference/kotlin/androidx/appcompat/app/AppCompatActivity.html">AppCompatActivity</a>, <span data-unresolved-link="dagger.hilt.internal/GeneratedComponentManagerHolder///PointingToDeclaration/">GeneratedComponentManagerHolder</span></div><div class="brief ">A generated base class to be extended by the @dagger.hilt.android.AndroidEntryPoint annotated class.</div></div><div class="content sourceset-dependent-content" data-togglable=":transcription/release"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="[release]-hilt_-main-activity/index.html">Hilt_MainActivity</a> : <a href="https://developer.android.com/reference/kotlin/androidx/appcompat/app/AppCompatActivity.html">AppCompatActivity</a>, <span data-unresolved-link="dagger.hilt.internal/GeneratedComponentManagerHolder///PointingToDeclaration/">GeneratedComponentManagerHolder</span></div><div class="brief ">A generated base class to be extended by the @dagger.hilt.android.AndroidEntryPoint annotated class.</div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1355660945%2FClasslikes%2F87726633" anchor-label="MainActivity" id="1355660945%2FClasslikes%2F87726633" data-filterable-set=":transcription/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":transcription/main" data-filterable-set=":transcription/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-main-activity/index.html"><span>Main</span><wbr><span><span>Activity</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1355660945%2FClasslikes%2F87726633"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":transcription/main" data-filterable-set=":transcription/main" data-active="" data-toggle=":transcription/main">androidJvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":transcription/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-main-activity/index.html">MainActivity</a> : <a href="https://developer.android.com/reference/kotlin/androidx/appcompat/app/AppCompatActivity.html">AppCompatActivity</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="816946125%2FClasslikes%2F1445143180" anchor-label="MainActivity_GeneratedInjector" id="816946125%2FClasslikes%2F1445143180" data-filterable-set=":transcription/debug,:transcription/release"></a>
+          <div class="table-row table-row_content" data-filterable-current=":transcription/debug,:transcription/release" data-filterable-set=":transcription/debug,:transcription/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../transcription/com.twinmind.transcription.ui/[release]-main-activity_-generated-injector/index.html"><span>Main</span><wbr><span>Activity_</span><wbr><span>Generated</span><wbr><span><span>Injector</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="816946125%2FClasslikes%2F1445143180"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":transcription/debug" data-filterable-set=":transcription/debug" data-active="" data-toggle=":transcription/debug">debug</button><button class="platform-bookmark" data-filterable-current=":transcription/release" data-filterable-set=":transcription/release" data-toggle=":transcription/release">release</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":transcription/debug"><div class="symbol monospace"><span class="token keyword">interface </span><a href="[debug]-main-activity_-generated-injector/index.html">MainActivity_GeneratedInjector</a></div></div><div class="content sourceset-dependent-content" data-togglable=":transcription/release"><div class="symbol monospace"><span class="token keyword">interface </span><a href="[release]-main-activity_-generated-injector/index.html">MainActivity_GeneratedInjector</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="746969214%2FClasslikes%2F87726633" anchor-label="MainViewModel" id="746969214%2FClasslikes%2F87726633" data-filterable-set=":transcription/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":transcription/main" data-filterable-set=":transcription/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-main-view-model/index.html"><span>Main</span><wbr><span>View</span><wbr><span><span>Model</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="746969214%2FClasslikes%2F87726633"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":transcription/main" data-filterable-set=":transcription/main" data-active="" data-toggle=":transcription/main">androidJvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":transcription/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-main-view-model/index.html">MainViewModel</a>&nbsp;<span><span class="token annotation builtin">@</span><span data-unresolved-link="javax.inject/Inject///PointingToDeclaration/"><span class="token annotation builtin">Inject</span></span>&nbsp;</span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">recordingRepository<span class="token operator">: </span><a href="../com.twinmind.transcription.sync/-recording-repository/index.html">RecordingRepository</a><span class="token punctuation">, </span></span><span class="parameter ">sessionRepository<span class="token operator">: </span><a href="../com.twinmind.transcription.sync/-session-repository/index.html">SessionRepository</a></span></span><span class="token punctuation">)</span> : <a href="https://developer.android.com/reference/kotlin/androidx/lifecycle/ViewModel.html">ViewModel</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1650143795%2FClasslikes%2F1445143180" anchor-label="MainViewModel_Factory" id="1650143795%2FClasslikes%2F1445143180" data-filterable-set=":transcription/debug,:transcription/release"></a>
+          <div class="table-row table-row_content" data-filterable-current=":transcription/debug,:transcription/release" data-filterable-set=":transcription/debug,:transcription/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../transcription/com.twinmind.transcription.ui/[release]-main-view-model_-factory/index.html"><span>Main</span><wbr><span>View</span><wbr><span>Model_</span><wbr><span>Factory</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1650143795%2FClasslikes%2F1445143180"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":transcription/debug" data-filterable-set=":transcription/debug" data-active="" data-toggle=":transcription/debug">debug</button><button class="platform-bookmark" data-filterable-current=":transcription/release" data-filterable-set=":transcription/release" data-toggle=":transcription/release">release</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":transcription/debug"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="dagger.internal/DaggerGenerated///PointingToDeclaration/"><span class="token annotation builtin">DaggerGenerated</span></span></div><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/javax/annotation/processing/Generated.html"><span class="token annotation builtin">Generated</span></a><span class="token punctuation">(</span><span>value<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"dagger.internal.codegen.ComponentProcessor"</span></span><span class="token punctuation">, </span></span><wbr><span>comments<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"https://dagger.dev"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">class </span><a href="[debug]-main-view-model_-factory/index.html">MainViewModel_Factory</a> : <span data-unresolved-link="dagger.internal/Factory///PointingToDeclaration/">Factory</span><span class="token operator">&lt;</span><a href="../../transcription/com.twinmind.transcription.ui/-main-view-model/index.html">MainViewModel</a><span class="token operator">&gt; </span></div></div><div class="content sourceset-dependent-content" data-togglable=":transcription/release"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="dagger.internal/DaggerGenerated///PointingToDeclaration/"><span class="token annotation builtin">DaggerGenerated</span></span></div><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/javax/annotation/processing/Generated.html"><span class="token annotation builtin">Generated</span></a><span class="token punctuation">(</span><span>value<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"dagger.internal.codegen.ComponentProcessor"</span></span><span class="token punctuation">, </span></span><wbr><span>comments<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"https://dagger.dev"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">class </span><a href="[release]-main-view-model_-factory/index.html">MainViewModel_Factory</a> : <span data-unresolved-link="dagger.internal/Factory///PointingToDeclaration/">Factory</span><span class="token operator">&lt;</span><a href="../../transcription/com.twinmind.transcription.ui/-main-view-model/index.html">MainViewModel</a><span class="token operator">&gt; </span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1811068225%2FClasslikes%2F1445143180" anchor-label="MainViewModel_HiltModules" id="-1811068225%2FClasslikes%2F1445143180" data-filterable-set=":transcription/debug,:transcription/release"></a>
+          <div class="table-row table-row_content" data-filterable-current=":transcription/debug,:transcription/release" data-filterable-set=":transcription/debug,:transcription/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../transcription/com.twinmind.transcription.ui/[release]-main-view-model_-hilt-modules/index.html"><span>Main</span><wbr><span>View</span><wbr><span>Model_</span><wbr><span>Hilt</span><wbr><span><span>Modules</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1811068225%2FClasslikes%2F1445143180"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":transcription/debug" data-filterable-set=":transcription/debug" data-active="" data-toggle=":transcription/debug">debug</button><button class="platform-bookmark" data-filterable-current=":transcription/release" data-filterable-set=":transcription/release" data-toggle=":transcription/release">release</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":transcription/debug"><div class="symbol monospace"><span class="token keyword">class </span><a href="[debug]-main-view-model_-hilt-modules/index.html">MainViewModel_HiltModules</a></div></div><div class="content sourceset-dependent-content" data-togglable=":transcription/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="[release]-main-view-model_-hilt-modules/index.html">MainViewModel_HiltModules</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-770709785%2FClasslikes%2F1445143180" anchor-label="MainViewModel_HiltModules_BindsModule_Binds_LazyMapKey" id="-770709785%2FClasslikes%2F1445143180" data-filterable-set=":transcription/debug,:transcription/release"></a>
+          <div class="table-row table-row_content" data-filterable-current=":transcription/debug,:transcription/release" data-filterable-set=":transcription/debug,:transcription/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../transcription/com.twinmind.transcription.ui/[release]-main-view-model_-hilt-modules_-binds-module_-binds_-lazy-map-key/index.html"><span>Main</span><wbr><span>View</span><wbr><span>Model_</span><wbr><span>Hilt</span><wbr><span>Modules_</span><wbr><span>Binds</span><wbr><span>Module_</span><wbr><span>Binds_</span><wbr><span>LazyMapKey</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-770709785%2FClasslikes%2F1445143180"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":transcription/debug" data-filterable-set=":transcription/debug" data-active="" data-toggle=":transcription/debug">debug</button><button class="platform-bookmark" data-filterable-current=":transcription/release" data-filterable-set=":transcription/release" data-toggle=":transcription/release">release</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":transcription/debug"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="dagger.internal/IdentifierNameString///PointingToDeclaration/"><span class="token annotation builtin">IdentifierNameString</span></span></div><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="dagger.internal/DaggerGenerated///PointingToDeclaration/"><span class="token annotation builtin">DaggerGenerated</span></span></div><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/javax/annotation/processing/Generated.html"><span class="token annotation builtin">Generated</span></a><span class="token punctuation">(</span><span>value<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"dagger.internal.codegen.ComponentProcessor"</span></span><span class="token punctuation">, </span></span><wbr><span>comments<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"https://dagger.dev"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">class </span><a href="[debug]-main-view-model_-hilt-modules_-binds-module_-binds_-lazy-map-key/index.html">MainViewModel_HiltModules_BindsModule_Binds_LazyMapKey</a></div></div><div class="content sourceset-dependent-content" data-togglable=":transcription/release"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="dagger.internal/IdentifierNameString///PointingToDeclaration/"><span class="token annotation builtin">IdentifierNameString</span></span></div><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="dagger.internal/DaggerGenerated///PointingToDeclaration/"><span class="token annotation builtin">DaggerGenerated</span></span></div><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/javax/annotation/processing/Generated.html"><span class="token annotation builtin">Generated</span></a><span class="token punctuation">(</span><span>value<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"dagger.internal.codegen.ComponentProcessor"</span></span><span class="token punctuation">, </span></span><wbr><span>comments<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"https://dagger.dev"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">class </span><a href="[release]-main-view-model_-hilt-modules_-binds-module_-binds_-lazy-map-key/index.html">MainViewModel_HiltModules_BindsModule_Binds_LazyMapKey</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1421035963%2FClasslikes%2F1445143180" anchor-label="MainViewModel_HiltModules_KeyModule_Provide_LazyMapKey" id="1421035963%2FClasslikes%2F1445143180" data-filterable-set=":transcription/debug,:transcription/release"></a>
+          <div class="table-row table-row_content" data-filterable-current=":transcription/debug,:transcription/release" data-filterable-set=":transcription/debug,:transcription/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../transcription/com.twinmind.transcription.ui/[release]-main-view-model_-hilt-modules_-key-module_-provide_-lazy-map-key/index.html"><span>Main</span><wbr><span>View</span><wbr><span>Model_</span><wbr><span>Hilt</span><wbr><span>Modules_</span><wbr><span>KeyModule_</span><wbr><span>Provide_</span><wbr><span>LazyMapKey</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1421035963%2FClasslikes%2F1445143180"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":transcription/debug" data-filterable-set=":transcription/debug" data-active="" data-toggle=":transcription/debug">debug</button><button class="platform-bookmark" data-filterable-current=":transcription/release" data-filterable-set=":transcription/release" data-toggle=":transcription/release">release</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":transcription/debug"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="dagger.internal/IdentifierNameString///PointingToDeclaration/"><span class="token annotation builtin">IdentifierNameString</span></span></div><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="dagger.internal/DaggerGenerated///PointingToDeclaration/"><span class="token annotation builtin">DaggerGenerated</span></span></div><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/javax/annotation/processing/Generated.html"><span class="token annotation builtin">Generated</span></a><span class="token punctuation">(</span><span>value<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"dagger.internal.codegen.ComponentProcessor"</span></span><span class="token punctuation">, </span></span><wbr><span>comments<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"https://dagger.dev"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">class </span><a href="[debug]-main-view-model_-hilt-modules_-key-module_-provide_-lazy-map-key/index.html">MainViewModel_HiltModules_KeyModule_Provide_LazyMapKey</a></div></div><div class="content sourceset-dependent-content" data-togglable=":transcription/release"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="dagger.internal/IdentifierNameString///PointingToDeclaration/"><span class="token annotation builtin">IdentifierNameString</span></span></div><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="dagger.internal/DaggerGenerated///PointingToDeclaration/"><span class="token annotation builtin">DaggerGenerated</span></span></div><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/javax/annotation/processing/Generated.html"><span class="token annotation builtin">Generated</span></a><span class="token punctuation">(</span><span>value<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"dagger.internal.codegen.ComponentProcessor"</span></span><span class="token punctuation">, </span></span><wbr><span>comments<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"https://dagger.dev"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">class </span><a href="[release]-main-view-model_-hilt-modules_-key-module_-provide_-lazy-map-key/index.html">MainViewModel_HiltModules_KeyModule_Provide_LazyMapKey</a></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1125482233%2FClasslikes%2F1445143180" anchor-label="MainViewModel_HiltModules_KeyModule_ProvideFactory" id="-1125482233%2FClasslikes%2F1445143180" data-filterable-set=":transcription/debug,:transcription/release"></a>
+          <div class="table-row table-row_content" data-filterable-current=":transcription/debug,:transcription/release" data-filterable-set=":transcription/debug,:transcription/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../transcription/com.twinmind.transcription.ui/[release]-main-view-model_-hilt-modules_-key-module_-provide-factory/index.html"><span>Main</span><wbr><span>View</span><wbr><span>Model_</span><wbr><span>Hilt</span><wbr><span>Modules_</span><wbr><span>KeyModule_</span><wbr><span>Provide</span><wbr><span><span>Factory</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1125482233%2FClasslikes%2F1445143180"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":transcription/debug" data-filterable-set=":transcription/debug" data-active="" data-toggle=":transcription/debug">debug</button><button class="platform-bookmark" data-filterable-current=":transcription/release" data-filterable-set=":transcription/release" data-toggle=":transcription/release">release</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":transcription/debug"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="dagger.internal/DaggerGenerated///PointingToDeclaration/"><span class="token annotation builtin">DaggerGenerated</span></span></div><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/javax/annotation/processing/Generated.html"><span class="token annotation builtin">Generated</span></a><span class="token punctuation">(</span><span>value<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"dagger.internal.codegen.ComponentProcessor"</span></span><span class="token punctuation">, </span></span><wbr><span>comments<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"https://dagger.dev"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">class </span><a href="[debug]-main-view-model_-hilt-modules_-key-module_-provide-factory/index.html">MainViewModel_HiltModules_KeyModule_ProvideFactory</a> : <span data-unresolved-link="dagger.internal/Factory///PointingToDeclaration/">Factory</span><span class="token operator">&lt;</span><a href="https://developer.android.com/reference/kotlin/java/lang/Boolean.html">Boolean</a><span class="token operator">&gt; </span></div></div><div class="content sourceset-dependent-content" data-togglable=":transcription/release"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="dagger.internal/DaggerGenerated///PointingToDeclaration/"><span class="token annotation builtin">DaggerGenerated</span></span></div><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/javax/annotation/processing/Generated.html"><span class="token annotation builtin">Generated</span></a><span class="token punctuation">(</span><span>value<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"dagger.internal.codegen.ComponentProcessor"</span></span><span class="token punctuation">, </span></span><wbr><span>comments<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"https://dagger.dev"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">class </span><a href="[release]-main-view-model_-hilt-modules_-key-module_-provide-factory/index.html">MainViewModel_HiltModules_KeyModule_ProvideFactory</a> : <span data-unresolved-link="dagger.internal/Factory///PointingToDeclaration/">Factory</span><span class="token operator">&lt;</span><a href="https://developer.android.com/reference/kotlin/java/lang/Boolean.html">Boolean</a><span class="token operator">&gt; </span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="1399726999%2FProperties%2F87726633" anchor-label="DETAIL_LEVELS" id="1399726999%2FProperties%2F87726633" data-filterable-set=":transcription/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":transcription/main" data-filterable-set=":transcription/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-d-e-t-a-i-l_-l-e-v-e-l-s.html"><span>DETAIL_</span><wbr><span>LEVELS</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1399726999%2FProperties%2F87726633"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":transcription/main" data-filterable-set=":transcription/main" data-active="" data-toggle=":transcription/main">androidJvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":transcription/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-d-e-t-a-i-l_-l-e-v-e-l-s.html">DETAIL_LEVELS</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-604621971%2FFunctions%2F87726633" anchor-label="MainScreen" id="-604621971%2FFunctions%2F87726633" data-filterable-set=":transcription/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":transcription/main" data-filterable-set=":transcription/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-main-screen.html"><span>Main</span><wbr><span><span>Screen</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-604621971%2FFunctions%2F87726633"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":transcription/main" data-filterable-set=":transcription/main" data-active="" data-toggle=":transcription/main">androidJvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":transcription/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><a href="-main-screen.html"><span class="token function">MainScreen</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">viewModel<span class="token operator">: </span><a href="-main-view-model/index.html">MainViewModel</a><span class="token operator"> = </span>hiltViewModel()</span></span><span class="token punctuation">)</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-866853365%2FFunctions%2F87726633" anchor-label="RecordButton" id="-866853365%2FFunctions%2F87726633" data-filterable-set=":transcription/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":transcription/main" data-filterable-set=":transcription/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-record-button.html"><span>Record</span><wbr><span><span>Button</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-866853365%2FFunctions%2F87726633"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                    <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark" data-filterable-current=":transcription/main" data-filterable-set=":transcription/main" data-active="" data-toggle=":transcription/main">androidJvm</button></div>
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":transcription/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><a href="-record-button.html"><span class="token function">RecordButton</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">viewModel<span class="token operator">: </span><a href="-main-view-model/index.html">MainViewModel</a><span class="token operator"> = </span>hiltViewModel()</span></span><span class="token punctuation">)</span></div></div>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2025 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
