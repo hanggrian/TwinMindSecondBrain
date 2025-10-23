@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context=".NotesFragment"
+  tools:ignore="HardcodedText,ContentDescription,UnusedAttribute,UseCompoundDrawables">
+
+  <com.google.android.material.appbar.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout style="@style/Widget.Main.ToolbarContainer">
+
+      <androidx.appcompat.widget.Toolbar
+        style="@style/Widget.Main.Toolbar"
+        app:menu="@menu/fragment_notes">
+
+        <ImageView style="@style/Widget.Main.LauncherImage"/>
+      </androidx.appcompat.widget.Toolbar>
+
+      <com.makeramen.roundedimageview.RoundedImageView style="@style/Widget.Main.ProfileImage"/>
+    </LinearLayout>
+  </com.google.android.material.appbar.AppBarLayout>
+
+  <LinearLayout
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <TextView
+      style="@style/Widget.Notes.DateText"
+      android:text="Friday, Oct 17"/>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:padding="8dp">
+
+      <androidx.cardview.widget.CardView
+        style="@style/Widget.Notes.GroupCard"
+        android:layout_weight="1">
+
+        <LinearLayout style="@style/Widget.Notes.GroupContainer">
+
+          <TextView
+            style="@style/Widget.Notes.GroupText"
+            android:text="Learn Intro to Computer Science"/>
+
+          <TextView
+            style="@style/Widget.Notes.Text"
+            android:text="The course emphasizes problem-solving and logical thinking, with practical programming assignments to reinforce theoretical…"/>
+
+          <LinearLayout
+            style="@style/Widget.Notes.AttachmentContainer"
+            android:layout_marginTop="4dp">
+
+            <ImageView
+              style="@style/Widget.Notes.AttachmentImage"
+              android:src="@drawable/outline_file"/>
+
+            <TextView
+              style="@style/Widget.Notes.AttachmentText"
+              android:text="CS101 Lecture.pdf"/>
+          </LinearLayout>
+
+          <com.google.android.material.chip.Chip
+            style="@style/Widget.Notes.CategoryChip"
+            android:layout_gravity="end"
+            android:text="Lecture"/>
+        </LinearLayout>
+      </androidx.cardview.widget.CardView>
+
+      <androidx.cardview.widget.CardView
+        style="@style/Widget.Notes.GroupCard"
+        android:layout_weight="1">
+
+        <LinearLayout style="@style/Widget.Notes.GroupContainer">
+
+          <TextView
+            style="@style/Widget.Notes.GroupText"
+            android:text="1:1 with Sunny"/>
+
+          <TextView
+            style="@style/Widget.Notes.Text"
+            android:text="Preparation for discussion with Sunny next Monday."/>
+
+          <com.google.android.material.chip.Chip
+            style="@style/Widget.Notes.CategoryChip"
+            android:layout_gravity="end"
+            android:text="Meeting"/>
+        </LinearLayout>
+      </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+    <TextView
+      style="@style/Widget.Notes.DateText"
+      android:text="Saturday, Oct 18"/>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:padding="8dp">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView style="@style/Widget.Notes.GroupCard">
+
+          <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineHeight="18dp"
+            android:padding="16dp"
+            android:text="Product feature prioritization"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"/>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView style="@style/Widget.Notes.GroupCard">
+
+          <LinearLayout style="@style/Widget.Notes.GroupContainer">
+
+            <TextView
+              style="@style/Widget.Notes.GroupText"
+              android:text="Tech Conference profiles"/>
+
+            <TextView
+              style="@style/Widget.Notes.ListText"
+              android:text="1.\t Daniel G."/>
+
+            <TextView
+              style="@style/Widget.Notes.ListText"
+              android:text="2.\t Sunny T."/>
+
+            <TextView
+              style="@style/Widget.Notes.ListText"
+              android:text="3.\t Nina T."/>
+
+            <TextView
+              style="@style/Widget.Notes.ListText"
+              android:text="4.\t Pranav S."/>
+
+            <com.google.android.material.chip.Chip
+              style="@style/Widget.Notes.CategoryChip"
+              android:layout_gravity="end"
+              android:text="Meeting"/>
+          </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <Space
+          android:layout_width="match_parent"
+          android:layout_height="8dp"/>
+      </LinearLayout>
+
+      <androidx.cardview.widget.CardView
+        style="@style/Widget.Notes.GroupCard"
+        android:layout_weight="1">
+
+        <LinearLayout style="@style/Widget.Notes.GroupContainer">
+
+          <TextView
+            style="@style/Widget.Notes.GroupText"
+            android:text="Study guide"/>
+
+          <TextView
+            style="@style/Widget.Notes.Text"
+            android:text="Topics for Principles of Statistics course."/>
+
+          <LinearLayout style="@style/Widget.Notes.AttachmentContainer">
+
+            <ImageView
+              style="@style/Widget.Notes.AttachmentImage"
+              android:src="@drawable/outline_link"/>
+
+            <TextView
+              style="@style/Widget.Notes.AttachmentText"
+              android:text="en.wikipedia.org"/>
+          </LinearLayout>
+
+          <com.google.android.material.chip.Chip
+            style="@style/Widget.Notes.CategoryChip"
+            android:layout_gravity="end"
+            android:text="Lecture"/>
+        </LinearLayout>
+      </androidx.cardview.widget.CardView>
+    </LinearLayout>
+  </LinearLayout>
+
+  <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    style="@style/Widget.Main.FloatingButton"
+    android:text="Capture"
+    app:icon="@drawable/ic_record"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

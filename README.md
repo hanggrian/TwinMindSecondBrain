@@ -1,21 +1,48 @@
-[![Android SDK](https://img.shields.io/badge/sdk-28%2B-informational)](https://developer.android.com/tools/releases/platforms#9.0)
+[![Android SDK](https://img.shields.io/badge/sdk-24%2B-informational)](https://developer.android.com/tools/releases/platforms#7.0)
 
 # TwinMind second brain
 
-<img
-  width="320px"
-  alt="Screenshot 1"
-  src="https://github.com/hanggrian/TwinMindSecondBrain/raw/assets/screenshot1.png"/>
-<img
-  width="320px"
-  alt="Screenshot 2"
-  src="https://github.com/hanggrian/TwinMindSecondBrain/raw/assets/screenshot2.png"/>
+## Transcription
 
 <img
   width="320px"
-  alt="Screenshot 3"
-  src="https://github.com/hanggrian/TwinMindSecondBrain/raw/assets/screenshot3.png"/>
+  alt="Transcription 1"
+  src="https://github.com/hanggrian/TwinMindSecondBrain/raw/assets/transcription1.png"/>
 <img
   width="320px"
-  alt="Screenshot 4"
-  src="https://github.com/hanggrian/TwinMindSecondBrain/raw/assets/screenshot4.png"/>
+  alt="Transcription 2"
+  src="https://github.com/hanggrian/TwinMindSecondBrain/raw/assets/transcription2.png"/>
+
+<img
+  width="320px"
+  alt="Transcription 3"
+  src="https://github.com/hanggrian/TwinMindSecondBrain/raw/assets/transcription3.png"/>
+<img
+  width="320px"
+  alt="Transcription 4"
+  src="https://github.com/hanggrian/TwinMindSecondBrain/raw/assets/transcription4.png"/>
+
+<img
+  width="640px"
+  alt="Transcription 5"
+  src="https://github.com/hanggrian/TwinMindSecondBrain/raw/assets/transcription5.png"/>
+
+## Wireframe
+
+<img
+  width="320px"
+  alt="Wireframe 1"
+  src="https://github.com/hanggrian/TwinMindSecondBrain/raw/assets/wireframe1.png"/>
+<img
+  width="320px"
+  alt="Wireframe 2"
+  src="https://github.com/hanggrian/TwinMindSecondBrain/raw/assets/wireframe2.png"/>
+
+<img
+  width="320px"
+  alt="Wireframe 3"
+  src="https://github.com/hanggrian/TwinMindSecondBrain/raw/assets/wireframe3.png"/>
+<img
+  width="320px"
+  alt="Wireframe 4"
+  src="https://github.com/hanggrian/TwinMindSecondBrain/raw/assets/wireframe4.png"/>

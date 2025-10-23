@@ -10,4 +10,4 @@ dependencyResolutionManagement.repositories {
 
 rootProject.name = "TwinMindSecondBrain"
 
-include("website")
+include("base", "wireframe", "transcription", "website")

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <style name="Widget.Notes.Text" parent="Widget.AppCompat.TextView">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textAppearance">@style/TextAppearance.Material3.BodyMedium</item>
+    <item name="android:lineHeight">14dp</item>
+  </style>
+
+  <style name="Widget.Notes.GroupText" parent="Widget.AppCompat.TextView">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginBottom">8dp</item>
+    <item name="android:textAppearance">@style/TextAppearance.Material3.TitleMedium</item>
+    <item name="android:lineHeight">16dp</item>
+  </style>
+</resources>

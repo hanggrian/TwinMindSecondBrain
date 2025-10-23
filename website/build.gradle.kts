@@ -5,12 +5,17 @@ val releaseDescription: String by project
 val releaseUrl: String by project
 
 plugins {
+    alias(libs.plugins.dokka)
     alias(libs.plugins.pages)
     alias(libs.plugins.git.publish)
 }
 
+dokka.dokkaPublications.html {
+    outputDirectory.set(layout.buildDirectory.dir("dokka/dokka/"))
+}
+
 pages {
-    resources.from("images")
+    resources.from("images", layout.buildDirectory.dir("dokka"))
     favicon.set("favicon.ico")
     materialist {
         authorName = developerName
@@ -18,11 +23,14 @@ pages {
         projectName = rootProject.name
         projectDescription = releaseDescription
         projectUrl = releaseUrl
+        button("View\nDocumentation", "dokka/")
+        button("Visit\nGitHub", releaseUrl)
 
         colorSurface = "linear-gradient(45deg, #012840 0%, #014873 50%, #FF7604 100%)"
         colorSurfaceContainer = "#FFFFFF"
         colorOnSurface = "#0B4F75"
         colorPrimary = "#F27128"
+        colorSecondary = "#FF9A5C"
     }
 }
 
@@ -32,6 +40,8 @@ gitPublish {
     contents.from(pages.outputDirectory)
 }
 
-tasks.register(LifecycleBasePlugin.CLEAN_TASK_NAME) {
-    delete(layout.buildDirectory)
+dependencies.dokka(project(":transcription"))
+
+tasks.deployResources {
+    dependsOn(tasks.dokkaGeneratePublicationHtml)
 }

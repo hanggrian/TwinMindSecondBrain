@@ -22,3 +22,5 @@ ktlint_standard = enabled
 ktlint_class_signature_rule_force_multiline_when_parameter_count_greater_or_equal_than = unset
 ktlint_function_signature_rule_force_multiline_when_parameter_count_greater_or_equal_than = unset
 ktlint_chain_method_rule_force_multiline_when_chain_operator_count_greater_or_equal_than = unset
+ktlint_rulebook_exception-subclass-catching = disabled # Kotlin cannot yet catch combined exceptions
+ktlint_standard_function-naming = disabled # Compose functions use CamelCase names
