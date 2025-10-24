@@ -9,7 +9,6 @@ plugins {
 android {
     namespace = "$releaseGroup.wireframe"
     buildFeatures {
-        buildConfig = false
         dataBinding = true
         viewBinding = true
     }

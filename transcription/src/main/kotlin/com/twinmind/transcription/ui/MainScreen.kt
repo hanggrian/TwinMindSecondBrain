@@ -59,18 +59,16 @@ import com.twinmind.transcription.R
 import com.twinmind.transcription.ai.Agent
 import com.twinmind.transcription.ai.Agent.Companion.DETAIL_HIGH
 import com.twinmind.transcription.ai.Agent.Companion.DETAIL_LOW
-import com.twinmind.transcription.ai.MockAgent
-import com.twinmind.transcription.res.DIMEN_LARGE
-import com.twinmind.transcription.res.DIMEN_MEDIUM
-import com.twinmind.transcription.res.DIMEN_SMALL
+import com.twinmind.transcription.ai.Agent.Companion.DETAIL_MEDIUM
+import com.twinmind.transcription.ai.FakeAgent
+import com.twinmind.transcription.res.Dimens
 import com.twinmind.transcription.sync.MainService
 import com.twinmind.transcription.sync.MainService.Companion.ACTION_RESUME
 import com.twinmind.transcription.sync.MainService.Companion.ACTION_START
 import com.twinmind.transcription.sync.MainService.Companion.ACTION_STOP
 import com.twinmind.transcription.sync.State
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
-val DETAIL_LEVELS = listOf("Low", "Medium", "High")
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -80,28 +78,35 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
 
     val loading by viewModel.loadingFlow.collectAsState()
     val summary by viewModel.summaryFlow.collectAsState()
+    val transcription by viewModel.transcriptionFlow.collectAsState()
     val error by viewModel.errorFlow.collectAsState()
+    val elapsed by viewModel.elapsedTimeFlow.collectAsState(initial = "00:00")
     val session by viewModel.sessionFlow.collectAsStateWithLifecycle()
     val sheetState = rememberModalBottomSheetState()
     val snackbarState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
     var detail by remember { mutableFloatStateOf(DETAIL_LOW) }
-    var agent by remember { mutableStateOf(MockAgent.name) }
+    var agent by remember { mutableStateOf(FakeAgent.NAME) }
     var showBottomSheet by remember { mutableStateOf(false) }
     var wasActive by remember { mutableStateOf(false) } // hotfix for sheet appearing on startup
 
-    LaunchedEffect(session.state, summary) {
+    LaunchedEffect(session.state, transcription) {
         if (session.state == State.RECORDING || session.state == State.PAUSED) {
             wasActive = true
         }
 
         if (session.state == State.STOPPED) {
             if (wasActive) {
-                viewModel.startTranscription(agent, detail)
-                if (summary.isNotBlank()) {
-                    showBottomSheet = true
-                    wasActive = false
+                scope.launch(Dispatchers.IO) {
+                    viewModel.startTranscription(agent, detail)
+                    scope.launch {
+                        if (transcription.isBlank()) {
+                            return@launch
+                        }
+                        showBottomSheet = true
+                        wasActive = false
+                    }
                 }
             }
         } else {
@@ -129,7 +134,7 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
                                         ?: R.drawable.ic_launcher_light,
                             ),
                         contentDescription = "TwinMind icon",
-                        modifier = Modifier.padding(DIMEN_MEDIUM),
+                        modifier = Modifier.padding(Dimens.Medium),
                     )
                 },
                 actions = {
@@ -144,8 +149,8 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
                         },
                         modifier =
                             Modifier
-                                .size(48.dp)
-                                .padding(end = DIMEN_MEDIUM),
+                                .size(Dimens.XLarge)
+                                .padding(end = Dimens.Medium),
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(),
@@ -158,7 +163,7 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
                 Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(DIMEN_LARGE),
+                    .padding(Dimens.Large),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
@@ -168,7 +173,70 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
                 horizontalArrangement = Arrangement.Center,
             ) {
                 Text(
-                    text = "Detail:",
+                    text = "Timer:",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.width(Dimens.XXXLarge),
+                )
+                Text(
+                    text = elapsed,
+                    style = MaterialTheme.typography.displayLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(start = Dimens.Small),
+                )
+            }
+            Row(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = Dimens.Medium, bottom = Dimens.Medium),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    text = "AI agent:",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.width(Dimens.XXXLarge),
+                )
+                Column(modifier = Modifier.weight(1f)) {
+                    viewModel.agents.forEach { a ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .selectable(
+                                        selected = agent == a.name,
+                                        onClick = { agent = a.name },
+                                        enabled = a.isEnabled(),
+                                    ),
+                        ) {
+                            RadioButton(
+                                selected = agent == a.name,
+                                onClick = { agent = a.name },
+                                enabled = a.isEnabled(),
+                            )
+                            Text(
+                                text = a.name,
+                                color =
+                                    LocalContentColor.current.takeIf { a.isEnabled() }
+                                        ?: LocalContentColor.current.copy(alpha = 0.38f),
+                                style = MaterialTheme.typography.bodyLarge,
+                            )
+                        }
+                    }
+                }
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    text = "Summary detail:",
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.width(96.dp),
                 )
@@ -180,47 +248,6 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
                     modifier = Modifier.weight(1f),
                 )
             }
-            Row(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = DIMEN_SMALL, bottom = 64.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                Text(
-                    text = "Agent:",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.width(96.dp),
-                )
-                Column(modifier = Modifier.weight(1f)) {
-                    Agent.all().forEach { a ->
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .selectable(
-                                        selected = agent == a.name,
-                                        onClick = { agent = a.name },
-                                        enabled = a.isEnabled,
-                                    ),
-                        ) {
-                            RadioButton(
-                                selected = agent == a.name,
-                                onClick = { agent = a.name },
-                                enabled = a.isEnabled,
-                            )
-                            Text(
-                                text = a.name,
-                                color =
-                                    LocalContentColor.current.takeIf { a.isEnabled }
-                                        ?: LocalContentColor.current.copy(alpha = 0.38f),
-                            )
-                        }
-                    }
-                }
-            }
             RecordButton()
             Text(
                 text =
@@ -230,8 +257,8 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
                         State.PAUSED -> "Paused."
                         else -> "Done."
                     },
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(top = DIMEN_LARGE),
+                style = MaterialTheme.typography.headlineLarge,
+                modifier = Modifier.padding(top = Dimens.Large),
             )
         }
 
@@ -243,7 +270,7 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
                             .size(100.dp)
                             .background(
                                 MaterialTheme.colorScheme.surface,
-                                shape = RoundedCornerShape(8.dp),
+                                shape = RoundedCornerShape(Dimens.Small),
                             ),
                     contentAlignment = Alignment.Center,
                 ) {
@@ -261,7 +288,20 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
         ) {
             TopAppBar(
                 title = {
-                    Text("Transcription")
+                    Column {
+                        Text(text = agent, style = MaterialTheme.typography.titleLarge)
+                        Text(
+                            text =
+                                "$elapsed (${
+                                    when (detail) {
+                                        DETAIL_LOW -> "Low"
+                                        DETAIL_MEDIUM -> "Medium"
+                                        else -> "High"
+                                    }
+                                })",
+                            style = MaterialTheme.typography.titleSmall,
+                        )
+                    }
                 },
                 navigationIcon = {
                     IconButton(
@@ -278,6 +318,7 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_close),
                             contentDescription = "Close summary",
+                            tint = MaterialTheme.colorScheme.primary,
                         )
                     }
                 },
@@ -299,6 +340,7 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_share),
                             contentDescription = "Share",
+                            tint = MaterialTheme.colorScheme.secondary,
                         )
                     }
                 },
@@ -309,24 +351,19 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
                     Modifier
                         .fillMaxWidth()
                         .verticalScroll(rememberScrollState())
-                        .padding(DIMEN_LARGE),
+                        .padding(Dimens.Large),
             ) {
                 LabelText("Summary")
                 Text(
                     text = summary,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(bottom = DIMEN_MEDIUM),
-                )
-                LabelText("Options")
-                Text(
-                    text = "Agent: $agent",
                     style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(top = DIMEN_MEDIUM),
+                    modifier = Modifier.padding(bottom = Dimens.Medium),
                 )
+                LabelText("Transcription")
                 Text(
-                    text = "Detail Level: ${DETAIL_LEVELS[detail.toInt()]}",
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(top = DIMEN_SMALL),
+                    text = transcription,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(bottom = Dimens.Medium),
                 )
             }
         }
@@ -368,11 +405,12 @@ fun RecordButton(viewModel: MainViewModel = hiltViewModel()) {
         },
         containerColor = MaterialTheme.colorScheme.secondary,
         contentColor = MaterialTheme.colorScheme.inverseOnSurface,
+        modifier = Modifier.padding(top = Dimens.XXXLarge),
     ) {
         Icon(
             painter = painterResource(id = iconId),
             contentDescription = "Record button",
-            modifier = Modifier.size(DIMEN_LARGE),
+            modifier = Modifier.size(Dimens.Large),
         )
     }
 }
@@ -383,5 +421,5 @@ private fun LabelText(text: String) =
         text = text,
         style = MaterialTheme.typography.labelLarge,
         color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(bottom = DIMEN_MEDIUM),
+        modifier = Modifier.padding(bottom = Dimens.Medium),
     )

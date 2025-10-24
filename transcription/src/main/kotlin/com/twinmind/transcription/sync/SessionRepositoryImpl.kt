@@ -24,40 +24,49 @@ class SessionRepositoryImpl
         private val Context.dataStore: DataStore<Preferences>
             by preferencesDataStore(name = "recording_session")
 
-        private object PreferencesKeys {
-            val IS_RECORDING = booleanPreferencesKey("is_recording")
-            val STATUS = stringPreferencesKey("status")
-            val PAUSE_REASON = stringPreferencesKey("pause_reason")
-            val GRACEFUL_TERMINATION = stringPreferencesKey("graceful_termination")
-        }
+        override val flow: Flow<Session>
+            get() =
+                context.dataStore.data
+                    .catch {
+                        if (it is IOException) {
+                            emit(emptyPreferences())
+                        } else {
+                            throw it
+                        }
+                    }.map {
+                        Session(
+                            it[IS_RECORDING] ?: false,
+                            State.valueOf(it[STATUS] ?: State.IDLE.name),
+                            it[ELAPSED_TIME] ?: 0L,
+                            PauseReason.valueOf(it[PAUSE_REASON] ?: PauseReason.NONE.name),
+                            GracefulTermination.valueOf(
+                                it[GRACEFUL_TERMINATION]
+                                    ?: GracefulTermination.DEFAULT.name,
+                            ),
+                        )
+                    }
 
         override suspend fun update(session: Session) {
             context.dataStore.edit {
-                it[PreferencesKeys.IS_RECORDING] = session.isRecording
-                it[PreferencesKeys.STATUS] = session.state.name
-                it[PreferencesKeys.PAUSE_REASON] = session.pauseReason.name
-                it[PreferencesKeys.GRACEFUL_TERMINATION] = session.gracefulTermination.name
+                it[IS_RECORDING] = session.isRecording
+                it[STATUS] = session.state.name
+                it[ELAPSED_TIME] = session.elapsedTime
+                it[PAUSE_REASON] = session.pauseReason.name
+                it[GRACEFUL_TERMINATION] = session.gracefulTermination.name
             }
         }
 
-        override fun getSessionFlow(): Flow<Session> =
-            context.dataStore.data
-                .catch {
-                    if (it is IOException) {
-                        emit(emptyPreferences())
-                    } else {
-                        throw it
-                    }
-                }.map {
-                    Session(
-                        it[PreferencesKeys.IS_RECORDING] ?: false,
-                        State.valueOf(it[PreferencesKeys.STATUS] ?: State.IDLE.name),
-                        PauseReason
-                            .valueOf(it[PreferencesKeys.PAUSE_REASON] ?: PauseReason.NONE.name),
-                        GracefulTermination.valueOf(
-                            it[PreferencesKeys.GRACEFUL_TERMINATION]
-                                ?: GracefulTermination.DEFAULT.name,
-                        ),
-                    )
-                }
+        override suspend fun updateElapsedTime(elapsedTime: Long) {
+            context.dataStore.edit {
+                it[ELAPSED_TIME] = elapsedTime
+            }
+        }
+
+        private companion object {
+            val IS_RECORDING = booleanPreferencesKey("is_recording")
+            val STATUS = stringPreferencesKey("status")
+            val ELAPSED_TIME = longPreferencesKey("elapsed_time")
+            val PAUSE_REASON = stringPreferencesKey("pause_reason")
+            val GRACEFUL_TERMINATION = stringPreferencesKey("graceful_termination")
+        }
     }

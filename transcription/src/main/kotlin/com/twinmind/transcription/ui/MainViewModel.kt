@@ -1,64 +1,75 @@
 package com.twinmind.transcription.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.twinmind.transcription.TwinMindApp
 import com.twinmind.transcription.ai.Agent
-import com.twinmind.transcription.db.schema.Chunk
-import com.twinmind.transcription.sync.RecordingRepository
+import com.twinmind.transcription.db.Chunks
 import com.twinmind.transcription.sync.Session
 import com.twinmind.transcription.sync.SessionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.ktor.utils.io.bits.of
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel
     @Inject
     constructor(
-        private val recordingRepository: RecordingRepository,
+        private val chunks: Chunks,
         sessionRepository: SessionRepository,
+        private val agentMap: Map<String, @JvmSuppressWildcards Agent>,
     ) : ViewModel() {
         val loadingFlow = MutableStateFlow(false)
 
         val summaryFlow = MutableStateFlow("")
 
+        val transcriptionFlow = MutableStateFlow("")
+
         val errorFlow = MutableStateFlow("")
 
+        val elapsedTimeFlow: Flow<String> =
+            sessionRepository.flow.map {
+                val seconds = (it.elapsedTime / 1000) % 60
+                val minutes = (it.elapsedTime / (1000 * 60)) % 60
+                val hours = (it.elapsedTime / (1000 * 60 * 60))
+                if (hours > 0) {
+                    "%02d:%02d:%02d".format(hours, minutes, seconds)
+                } else {
+                    "%02d:%02d".format(minutes, seconds)
+                }
+            }
+
         val sessionFlow: StateFlow<Session> =
-            sessionRepository
-                .getSessionFlow()
-                .stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(5000),
-                    initialValue = Session(),
-                )
+            sessionRepository.flow.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = Session(),
+            )
 
-        fun startTranscription(agent: String, detail: Float) {
-            loadingFlow.value = true
-            viewModelScope.launch {
-                try {
-                    summaryFlow.value = Agent.find(agent).transcribe(detail)
-                } catch (e: Exception) {
-                    errorFlow.value = e.message!!
-                } finally {
-                    loadingFlow.value = false
-                }
-            }
-        }
+        val agents: Collection<Agent> = agentMap.values
 
-        fun onNewChunkReceived(chunk: Chunk) {
-            viewModelScope.launch {
-                try {
-                    recordingRepository.saveChunk(chunk)
-                } catch (e: Exception) {
-                    Log.e(TwinMindApp.Companion.TAG, "Failed to insert chunk: '${e.message}'")
+        fun getAgent(name: String): Agent = agentMap[name] ?: error("Agent not found: $name")
+
+        suspend fun startTranscription(agent: String, detail: Float) {
+            val builder = StringBuilder()
+            chunks
+                .getAll()
+                .also {
+                    summaryFlow.value =
+                        getAgent(agent).transcribe(it, detail, loadingFlow, errorFlow)
+                }.forEachIndexed { i, chunk ->
+                    chunks.delete(chunk)
+                    val transcript = chunk.transcript ?: return@forEachIndexed
+                    if (i != 0) {
+                        builder.append(' ')
+                    }
+                    builder.append(transcript)
                 }
-            }
+            transcriptionFlow.value = builder.toString()
         }
     }

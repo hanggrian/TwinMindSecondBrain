@@ -8,7 +8,6 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
@@ -26,12 +25,12 @@ fun TwinMindTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composab
     MaterialTheme(
         colorScheme =
             darkColorScheme(
-                primary = Color(0xFF5BA3D0),
-                secondary = Color(0xFFFF9A5C),
+                primary = Colors.BlueMuted,
+                secondary = Colors.OrangeMuted,
             ).takeIf { darkTheme }
                 ?: lightColorScheme(
-                    primary = COLOR_BLUE,
-                    secondary = COLOR_ORANGE,
+                    primary = Colors.Blue,
+                    secondary = Colors.Orange,
                 ),
         typography = Typography(),
         content = content,

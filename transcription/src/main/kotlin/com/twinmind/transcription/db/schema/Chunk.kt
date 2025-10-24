@@ -12,13 +12,13 @@ data class Chunk(
     @ColumnInfo(name = "id")
     val id: Long = 0,
     @ColumnInfo(name = "file_path")
-    val filePath: String,
+    var filePath: String,
     @ColumnInfo(name = "order")
-    val order: Int,
+    var order: Int,
     @ColumnInfo(name = "status")
-    val status: ChunkStatus = ChunkStatus.PENDING,
+    var status: ChunkStatus = ChunkStatus.PENDING,
     @ColumnInfo(name = "transcript")
-    val transcript: String? = null,
+    var transcript: String? = null,
 ) {
     val file: File get() = File(filePath)
 }

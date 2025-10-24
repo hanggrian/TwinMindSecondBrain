@@ -13,6 +13,7 @@ import android.util.Log
 import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleService
 import com.twinmind.transcription.TwinMindApp
+import com.twinmind.transcription.db.Chunks
 import com.twinmind.transcription.db.schema.Chunk
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -22,13 +23,14 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
 @SuppressLint("InlinedApi")
 class MainService : LifecycleService() {
-    @Inject lateinit var recordingRepository: RecordingRepository
+    @Inject lateinit var chunks: Chunks
 
     @Inject lateinit var notificationsRepository: NotificationRepository
 
@@ -41,14 +43,28 @@ class MainService : LifecycleService() {
     private lateinit var request: AudioFocusRequest
 
     private var recorder: MediaRecorder? = null
-    private var job: Job? = null
+    private var chunkJob: Job? = null // for entity
+    private var totalJob: Job? = null // for timer
     private var chunkOrder: Int = 0
     private var chunkPath: String? = null
+
+    @Suppress("deprecation")
+    private fun createRecorder(): MediaRecorder {
+        val recorder =
+            MediaRecorder(this)
+                .takeIf { Build.VERSION.SDK_INT >= Build.VERSION_CODES.S }
+                ?: MediaRecorder()
+        return recorder.apply {
+            setAudioSource(MEDIA_SOURCE)
+            setOutputFormat(MEDIA_FORMAT)
+            setAudioEncoder(MEDIA_ENCODER)
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()
         scope.launch {
-            sessionRepository.getSessionFlow().collect {
+            sessionRepository.flow.collect {
                 notificationsRepository
                     .update(notificationsRepository.create(it.state, it.pauseReason))
             }
@@ -91,9 +107,8 @@ class MainService : LifecycleService() {
         scope.cancel()
     }
 
-    @Suppress("deprecation")
     private fun startRecording() {
-        if (!storageIsSufficient()) {
+        if (!isStorageSufficient()) {
             stopRecording(GracefulTermination.LOW_STORAGE)
             return
         }
@@ -101,22 +116,16 @@ class MainService : LifecycleService() {
 
         audioManager.requestAudioFocus(request)
 
-        recorder =
-            MediaRecorder(this)
-                .takeIf { Build.VERSION.SDK_INT >= Build.VERSION_CODES.S }
-                ?: MediaRecorder()
+        recorder = createRecorder()
+
         recorder?.run {
-            setAudioSource(MEDIA_SOURCE)
-            setOutputFormat(MEDIA_FORMAT)
-            setAudioEncoder(MEDIA_ENCODER)
             setOutputFile(chunkPath)
             try {
                 prepare()
                 start()
                 chunkOrder = 1
-                startChunkTimer()
             } catch (e: Exception) {
-                Log.e(TwinMindApp.TAG, e.message!!)
+                Log.e(TwinMindApp.TAG, "Error starting first recorder.", e)
                 stopRecording(GracefulTermination.UNKNOWN)
                 return
             }
@@ -127,22 +136,26 @@ class MainService : LifecycleService() {
                 .update(notificationsRepository.create(State.RECORDING, PauseReason.NONE))
             sessionRepository.update(
                 Session(
-                    true,
+                    isRecording = true,
                     state = State.RECORDING,
+                    elapsedTime = 0L,
                     pauseReason = PauseReason.NONE,
                 ),
             )
+            startTotalTimer()
         }
+        startChunkTimer()
     }
 
     private fun pauseRecording(reason: PauseReason) {
         scope.launch {
-            val session = sessionRepository.getSessionFlow().first()
+            val session = sessionRepository.flow.first()
             if (session.state != State.RECORDING) {
                 return@launch
             }
             sessionRepository.update(session.copy(state = State.PAUSED, pauseReason = reason))
-            job?.cancel()
+            chunkJob?.cancel()
+            totalJob?.cancel()
 
             recorder?.pause()
         }
@@ -150,7 +163,7 @@ class MainService : LifecycleService() {
 
     private fun resumeRecording() {
         scope.launch {
-            val session = sessionRepository.getSessionFlow().first()
+            val session = sessionRepository.flow.first()
             if (session.state != State.PAUSED) {
                 return@launch
             }
@@ -159,66 +172,114 @@ class MainService : LifecycleService() {
 
             recorder?.resume()
             startChunkTimer()
+            startTotalTimer()
         }
     }
 
     private fun stopRecording(termination: GracefulTermination) {
-        scope.launch {
+        chunkJob?.cancel()
+        totalJob?.cancel()
+
+        scope.launch(Dispatchers.IO) {
+            val currentChunkPath = chunkPath
+            if (currentChunkPath != null && recorder != null) {
+                try {
+                    recorder?.stop()
+                    recorder?.release()
+
+                    chunks.insert(
+                        Chunk(
+                            filePath = currentChunkPath,
+                            order = chunkOrder,
+                        ),
+                    )
+                    Log.i(TwinMindApp.TAG, "Final Chunk #$chunkOrder inserted.")
+                } catch (e: Exception) {
+                    Log.e(TwinMindApp.TAG, "Error stopping recorder.", e)
+                } finally {
+                    recorder = null
+                }
+            }
+
+            chunkPath = null
+            audioManager.abandonAudioFocusRequest(request)
+
             sessionRepository.update(
-                Session(false, state = State.STOPPED, gracefulTermination = termination),
+                sessionRepository.flow.first().copy(
+                    isRecording = false,
+                    state = State.STOPPED,
+                    gracefulTermination = termination,
+                ),
             )
+
+            withContext(Dispatchers.Main) {
+                stopForeground(STOP_FOREGROUND_REMOVE)
+                stopSelf()
+            }
         }
-
-        job?.cancel()
-
-        try {
-            recorder?.stop()
-            recorder?.reset()
-            recorder?.release()
-        } catch (e: Exception) {
-            Log.e(TwinMindApp.TAG, e.message!!)
-        }
-        chunkPath = null
-
-        audioManager.abandonAudioFocusRequest(request)
-        stopForeground(STOP_FOREGROUND_REMOVE)
-        stopSelf()
     }
 
     private fun startChunkTimer() {
-        job?.cancel()
-        job =
-            scope.launch {
-                delay(CHUNK_STEPS)
+        chunkJob?.cancel()
+        chunkJob =
+            scope.launch(Dispatchers.IO) {
+                while (true) {
+                    delay(CHUNK_STEPS)
 
-                val path = chunkPath ?: return@launch
-                recorder?.stop()
-                recorder?.reset()
-                recordingRepository.saveChunk(
-                    Chunk(
-                        filePath = path,
-                        order = chunkOrder,
-                    ),
-                )
-
-                updateChunkPath()
-                chunkOrder++
-
-                recorder?.run {
-                    setOutputFile(chunkPath)
                     try {
-                        prepare()
-                        start()
-                        startChunkTimer()
+                        recorder?.stop()
+                        recorder?.release()
+
+                        val pathForInsert = chunkPath
+                        if (pathForInsert != null) {
+                            chunks.insert(
+                                Chunk(
+                                    filePath = pathForInsert,
+                                    order = chunkOrder,
+                                ),
+                            )
+                            Log.i(TwinMindApp.TAG, "Chunk #$chunkOrder inserted.")
+                        } else {
+                            Log.e(TwinMindApp.TAG, "chunkPath was null. Stopping chunking job.")
+                            break
+                        }
+
+                        updateChunkPath()
+                        chunkOrder++
+
+                        recorder = createRecorder()
+                        recorder?.run {
+                            setOutputFile(chunkPath)
+                            prepare()
+                            start()
+                            Log.d(
+                                TwinMindApp.TAG,
+                                "Recorder started for next Chunk #$chunkOrder to $chunkPath.",
+                            )
+                        }
                     } catch (e: Exception) {
-                        Log.e(TwinMindApp.TAG, e.message!!)
+                        Log.e(TwinMindApp.TAG, "FATAL", e)
                         stopRecording(GracefulTermination.UNKNOWN)
+                        break
                     }
                 }
             }
     }
 
-    private fun storageIsSufficient(): Boolean {
+    private fun startTotalTimer() {
+        totalJob?.cancel()
+        totalJob =
+            scope.launch(Dispatchers.IO) {
+                var current = sessionRepository.flow.first().elapsedTime
+                while (true) {
+                    current += DEFAULT_STEPS
+                    delay(DEFAULT_STEPS)
+                    sessionRepository.updateElapsedTime(current)
+                }
+            }
+    }
+
+    private fun isStorageSufficient(): Boolean {
         try {
             val stat = StatFs(filesDir.path)
             val blockSize = stat.blockSizeLong
@@ -227,7 +288,7 @@ class MainService : LifecycleService() {
             val usagePercentage = ((usedSpace).toDouble() / totalSpace.toDouble()) * 100
             return usagePercentage < MAX_STORAGE_USAGE_RATIO
         } catch (e: Exception) {
-            Log.e(TwinMindApp.TAG, "Storage check failed: ${e.message}", e)
+            Log.e(TwinMindApp.TAG, "Storage check failed.", e)
             return false
         }
     }
@@ -251,5 +312,6 @@ class MainService : LifecycleService() {
         private const val MAX_STORAGE_USAGE_RATIO = 90.0
 
         private const val CHUNK_STEPS = 30000L
+        private const val DEFAULT_STEPS = 1000L
     }
 }

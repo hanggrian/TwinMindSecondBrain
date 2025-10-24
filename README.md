@@ -2,7 +2,9 @@
 
 # TwinMind second brain
 
-## Transcription
+[Download APK](https://github.com/hanggrian/TwinMindSecondBrain/releases/download/1/transcription-debug.apk)
+
+## [Transcription](https://github.com/hanggrian/TwinMindSecondBrain/blob/assets/Android%20Developer%20-%20Take%20Home%20Assignment.pdf)
 
 <img
   width="320px"

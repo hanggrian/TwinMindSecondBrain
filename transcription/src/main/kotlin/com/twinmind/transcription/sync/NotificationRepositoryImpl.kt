@@ -32,7 +32,7 @@ class NotificationRepositoryImpl
                 .setContentTitle(state.message)
                 .setContentText(pauseReason.message.takeIf { state == State.PAUSED })
                 .setSmallIcon(R.drawable.ic_launcher_dark)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setOngoing(state != State.STOPPED)
                 .apply {
                     if (state == State.RECORDING) {
@@ -51,7 +51,7 @@ class NotificationRepositoryImpl
                     NotificationChannel(
                         CHANNEL_ID,
                         TwinMindApp.TAG,
-                        NotificationManager.IMPORTANCE_DEFAULT,
+                        NotificationManager.IMPORTANCE_LOW,
                     ).apply { description = TwinMindApp.TAG }
             }
             context

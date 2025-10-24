@@ -4,12 +4,7 @@ plugins {
     alias(libs.plugins.android.library)
 }
 
-android {
-    namespace = "$releaseGroup.base"
-    buildFeatures {
-        buildConfig = false
-    }
-}
+android.namespace = "$releaseGroup.base"
 
 dependencies {
     api(libs.kotlinx.coroutines)
