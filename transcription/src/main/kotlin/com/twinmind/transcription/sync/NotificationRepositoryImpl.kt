@@ -37,11 +37,10 @@ class NotificationRepositoryImpl
                 .apply {
                     if (state == State.RECORDING) {
                         addAction(R.drawable.ic_pause, "Pause", ACTION_PAUSE.pendingIntent)
-                        addAction(R.drawable.ic_stop, "Stop", ACTION_STOP.pendingIntent)
                     } else if (state == State.PAUSED) {
                         addAction(R.drawable.ic_play, "Resume", ACTION_RESUME.pendingIntent)
-                        addAction(R.drawable.ic_stop, "Stop", ACTION_STOP.pendingIntent)
                     }
+                    addAction(R.drawable.ic_stop, "Stop", ACTION_STOP.pendingIntent)
                 }.build()
 
         @SuppressLint("NewApi")

@@ -21,18 +21,16 @@ class SessionRepositoryImpl
     constructor(
         @ApplicationContext private val context: Context,
     ) : SessionRepository {
-        private val Context.dataStore: DataStore<Preferences>
-            by preferencesDataStore(name = "recording_session")
+        private val Context.dataStore by preferencesDataStore(name = "recording_session")
 
         override val flow: Flow<Session>
             get() =
                 context.dataStore.data
                     .catch {
-                        if (it is IOException) {
-                            emit(emptyPreferences())
-                        } else {
+                        if (it !is IOException) {
                             throw it
                         }
+                        emit(emptyPreferences())
                     }.map {
                         Session(
                             it[IS_RECORDING] ?: false,

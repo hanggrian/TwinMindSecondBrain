@@ -26,63 +26,58 @@ import javax.inject.Singleton
 class OpenAiApi
     @Inject
     constructor(private val client: HttpClient) {
-        suspend fun transcribeAudio(file: File): String? {
+        suspend fun transcribeAudio(file: File): String? =
             try {
-                val response =
-                    client.submitFormWithBinaryData(
-                        url = TRANSCRIPTION_ENDPOINT,
-                        formData =
-                            formData {
-                                append(
-                                    key = "file",
-                                    value = file.readBytes(),
-                                    headers =
-                                        Headers.build {
-                                            append(
-                                                HttpHeaders.ContentType,
-                                                ContentType("audio", "mp4").toString(),
-                                            )
-                                            append(
-                                                HttpHeaders.ContentDisposition,
-                                                "form-data; " +
-                                                    "name=\"file\"; filename=\"${file.name}\"",
-                                            )
-                                        },
-                                )
-                                append("model", TRANSCRIPTION_MODEL)
-                            },
+                client
+                    .submitFormWithBinaryData(
+                        TRANSCRIPTION_ENDPOINT,
+                        formData {
+                            append(
+                                "file",
+                                file.readBytes(),
+                                Headers.build {
+                                    append(
+                                        HttpHeaders.ContentType,
+                                        ContentType("audio", "mp4").toString(),
+                                    )
+                                    append(
+                                        HttpHeaders.ContentDisposition,
+                                        "form-data; name=\"file\"; filename=\"${file.name}\"",
+                                    )
+                                },
+                            )
+                            append("model", TRANSCRIPTION_MODEL)
+                        },
                     ) {
                         headers.append(
                             HttpHeaders.Authorization,
                             "Bearer ${BuildConfig.OPENAI_API_KEY}",
                         )
-                    }
-                return response.body<Whisper>().text
+                    }.body<Whisper>()
+                    .text
             } catch (e: Exception) {
                 Log.e(TwinMindApp.TAG, "Whisper API failed.", e)
-                return null
+                null
             }
-        }
 
-        suspend fun summarizeText(text: String): String? {
+        suspend fun summarizeText(text: String): String? =
             try {
-                val request =
-                    ChatRequest(
-                        model = SUMMARY_MODEL,
-                        messages =
-                            listOf(
-                                ChatMessage(
-                                    role = "system",
-                                    content =
+                client
+                    .post(SUMMARY_ENDPOINT) {
+                        setBody(
+                            ChatRequest(
+                                SUMMARY_MODEL,
+                                listOf(
+                                    ChatMessage(
+                                        "system",
                                         "You are to summarize a transcript generated from voice " +
                                             "recording.",
+                                    ),
+                                    ChatMessage("user", text),
                                 ),
-                                ChatMessage(role = "user", content = text),
                             ),
-                    )
-                return client
-                    .post(SUMMARY_ENDPOINT) { setBody(request) }
-                    .body<ChatResponse>()
+                        )
+                    }.body<ChatResponse>()
                     .choices
                     .firstOrNull()
                     ?.message
@@ -90,9 +85,8 @@ class OpenAiApi
                     ?.trim()
             } catch (e: Exception) {
                 Log.e(TwinMindApp.TAG, "Summarization API failed.", e)
-                return null
+                null
             }
-        }
 
         companion object {
             private const val TRANSCRIPTION_ENDPOINT =

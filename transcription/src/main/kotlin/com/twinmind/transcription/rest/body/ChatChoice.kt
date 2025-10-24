@@ -1,6 +1,12 @@
 package com.twinmind.transcription.rest.body
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ChatChoice(val index: Int, val message: ChatMessage)
+data class ChatChoice(
+    @SerialName("index")
+    val index: Int,
+    @SerialName("message")
+    val message: ChatMessage,
+)

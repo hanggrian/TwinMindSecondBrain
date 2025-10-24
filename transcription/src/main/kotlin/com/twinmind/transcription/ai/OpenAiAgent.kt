@@ -20,27 +20,26 @@ class OpenAiAgent
             var errorCounter = 0
 
             loading.value = true
-            chunks.forEachIndexed { i, chunk ->
-                if (chunk.status != ChunkStatus.PENDING) {
-                    return@forEachIndexed
-                }
-                try {
-                    val transcription = api.transcribeAudio(chunk.file)
-                    if (!transcription.isNullOrBlank()) {
-                        if (i != 0) {
-                            transcriptionBuilder.append(' ')
+            chunks
+                .filter { it.status == ChunkStatus.PENDING }
+                .forEachIndexed { i, chunk ->
+                    try {
+                        val transcription = api.transcribeAudio(chunk.file)
+                        if (!transcription.isNullOrBlank()) {
+                            if (i != 0) {
+                                transcriptionBuilder.append(' ')
+                            }
+                            transcriptionBuilder.append(transcription)
+                            chunk.transcript = transcription.trim()
+                            chunk.status = ChunkStatus.TRANSCRIBED
+                        } else {
+                            chunk.status = ChunkStatus.FAILED
                         }
-                        transcriptionBuilder.append(transcription)
-                        chunk.transcript = transcription.trim()
-                        chunk.status = ChunkStatus.TRANSCRIBED
-                    } else {
+                    } catch (_: Exception) {
+                        errorCounter++
                         chunk.status = ChunkStatus.FAILED
                     }
-                } catch (_: Exception) {
-                    errorCounter++
-                    chunk.status = ChunkStatus.FAILED
                 }
-            }
             loading.value = false
             val summary =
                 api

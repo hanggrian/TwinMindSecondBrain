@@ -9,6 +9,6 @@ object Colors {
     val Blue = Color(0xFF0B4F75)
     val Orange = Color(0xFFF27128)
 
-    val BlueMuted = Color(0xFF5BA3D0)
-    val OrangeMuted = Color(0xFFFF9A5C)
+    val BlueVibrant = Color(0xFF5BA3D0)
+    val OrangeVibrant = Color(0xFFFF9A5C)
 }

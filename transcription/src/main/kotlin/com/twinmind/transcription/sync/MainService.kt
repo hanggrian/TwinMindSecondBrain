@@ -45,7 +45,7 @@ class MainService : LifecycleService() {
     private var recorder: MediaRecorder? = null
     private var chunkJob: Job? = null // for entity
     private var totalJob: Job? = null // for timer
-    private var chunkOrder: Int = 0
+    private var chunkOrder = 0
     private var chunkPath: String? = null
 
     @Suppress("deprecation")
@@ -116,20 +116,19 @@ class MainService : LifecycleService() {
 
         audioManager.requestAudioFocus(request)
 
-        recorder = createRecorder()
-
-        recorder?.run {
-            setOutputFile(chunkPath)
-            try {
-                prepare()
-                start()
-                chunkOrder = 1
-            } catch (e: Exception) {
-                Log.e(TwinMindApp.TAG, "Error starting first recorder.", e)
-                stopRecording(GracefulTermination.UNKNOWN)
-                return
+        recorder =
+            createRecorder().also {
+                it.setOutputFile(chunkPath)
+                try {
+                    it.prepare()
+                    it.start()
+                    chunkOrder = 1
+                } catch (e: Exception) {
+                    Log.e(TwinMindApp.TAG, "Error starting first recorder.", e)
+                    stopRecording(GracefulTermination.UNKNOWN)
+                    return
+                }
             }
-        }
 
         scope.launch {
             notificationsRepository
@@ -142,6 +141,7 @@ class MainService : LifecycleService() {
                     pauseReason = PauseReason.NONE,
                 ),
             )
+
             startTotalTimer()
         }
         startChunkTimer()
@@ -149,24 +149,26 @@ class MainService : LifecycleService() {
 
     private fun pauseRecording(reason: PauseReason) {
         scope.launch {
-            val session = sessionRepository.flow.first()
-            if (session.state != State.RECORDING) {
-                return@launch
-            }
+            val session =
+                sessionRepository.flow
+                    .first()
+                    .takeIf { it.state == State.RECORDING }
+                    ?: return@launch
             sessionRepository.update(session.copy(state = State.PAUSED, pauseReason = reason))
+
             chunkJob?.cancel()
             totalJob?.cancel()
-
             recorder?.pause()
         }
     }
 
     private fun resumeRecording() {
         scope.launch {
-            val session = sessionRepository.flow.first()
-            if (session.state != State.PAUSED) {
-                return@launch
-            }
+            val session =
+                sessionRepository.flow
+                    .first()
+                    .takeIf { it.state == State.RECORDING }
+                    ?: return@launch
             sessionRepository
                 .update(session.copy(state = State.RECORDING, pauseReason = PauseReason.NONE))
 
@@ -181,15 +183,14 @@ class MainService : LifecycleService() {
         totalJob?.cancel()
 
         scope.launch(Dispatchers.IO) {
-            val currentChunkPath = chunkPath
-            if (currentChunkPath != null && recorder != null) {
+            if (chunkPath != null && recorder != null) {
                 try {
                     recorder?.stop()
                     recorder?.release()
 
                     chunks.insert(
                         Chunk(
-                            filePath = currentChunkPath,
+                            filePath = chunkPath!!,
                             order = chunkOrder,
                         ),
                     )
@@ -230,11 +231,10 @@ class MainService : LifecycleService() {
                         recorder?.stop()
                         recorder?.release()
 
-                        val pathForInsert = chunkPath
-                        if (pathForInsert != null) {
+                        if (chunkPath != null) {
                             chunks.insert(
                                 Chunk(
-                                    filePath = pathForInsert,
+                                    filePath = chunkPath!!,
                                     order = chunkOrder,
                                 ),
                             )
@@ -247,16 +247,16 @@ class MainService : LifecycleService() {
                         updateChunkPath()
                         chunkOrder++
 
-                        recorder = createRecorder()
-                        recorder?.run {
-                            setOutputFile(chunkPath)
-                            prepare()
-                            start()
-                            Log.d(
-                                TwinMindApp.TAG,
-                                "Recorder started for next Chunk #$chunkOrder to $chunkPath.",
-                            )
-                        }
+                        recorder =
+                            createRecorder().also {
+                                it.setOutputFile(chunkPath)
+                                it.prepare()
+                                it.start()
+                                Log.d(
+                                    TwinMindApp.TAG,
+                                    "Recorder started for next Chunk #$chunkOrder to $chunkPath.",
+                                )
+                            }
                     } catch (e: Exception) {
                         Log.e(TwinMindApp.TAG, "FATAL", e)
                         stopRecording(GracefulTermination.UNKNOWN)
@@ -285,8 +285,7 @@ class MainService : LifecycleService() {
             val blockSize = stat.blockSizeLong
             val totalSpace = stat.blockCountLong * blockSize
             val usedSpace = totalSpace - (stat.availableBlocksLong * blockSize)
-            val usagePercentage = ((usedSpace).toDouble() / totalSpace.toDouble()) * 100
-            return usagePercentage < MAX_STORAGE_USAGE_RATIO
+            return ((usedSpace).toDouble() / totalSpace.toDouble()) * 100 < MAX_STORAGE_USAGE_RATIO
         } catch (e: Exception) {
             Log.e(TwinMindApp.TAG, "Storage check failed.", e)
             return false
@@ -305,9 +304,9 @@ class MainService : LifecycleService() {
         const val ACTION_RESUME = "ACTION_RESUME"
         const val ACTION_STOP = "ACTION_STOP"
 
-        private const val MEDIA_FORMAT: Int = MediaRecorder.OutputFormat.MPEG_4
-        private const val MEDIA_ENCODER: Int = MediaRecorder.AudioEncoder.AAC
-        private const val MEDIA_SOURCE: Int = MediaRecorder.AudioSource.MIC
+        private const val MEDIA_FORMAT = MediaRecorder.OutputFormat.MPEG_4
+        private const val MEDIA_ENCODER = MediaRecorder.AudioEncoder.AAC
+        private const val MEDIA_SOURCE = MediaRecorder.AudioSource.MIC
 
         private const val MAX_STORAGE_USAGE_RATIO = 90.0
 

@@ -56,7 +56,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.makeramen.roundedimageview.RoundedImageView
 import com.twinmind.transcription.R
-import com.twinmind.transcription.ai.Agent
 import com.twinmind.transcription.ai.Agent.Companion.DETAIL_HIGH
 import com.twinmind.transcription.ai.Agent.Companion.DETAIL_LOW
 import com.twinmind.transcription.ai.Agent.Companion.DETAIL_MEDIUM
@@ -80,7 +79,7 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
     val summary by viewModel.summaryFlow.collectAsState()
     val transcription by viewModel.transcriptionFlow.collectAsState()
     val error by viewModel.errorFlow.collectAsState()
-    val elapsed by viewModel.elapsedTimeFlow.collectAsState(initial = "00:00")
+    val elapsed by viewModel.elapsedTimeFlow.collectAsState("00:00")
     val session by viewModel.sessionFlow.collectAsStateWithLifecycle()
     val sheetState = rememberModalBottomSheetState()
     val snackbarState = remember { SnackbarHostState() }
@@ -115,7 +114,7 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
     }
     LaunchedEffect(error) {
         error.takeUnless { it.isEmpty() }?.let {
-            snackbarState.showSnackbar(message = it)
+            snackbarState.showSnackbar(it)
             viewModel.errorFlow.value = ""
         }
     }
@@ -123,7 +122,7 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {},
+                {},
                 navigationIcon = {
                     Image(
                         painter =
@@ -159,68 +158,60 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
         snackbarHost = { SnackbarHost(snackbarState) },
     ) { paddingValues ->
         Column(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .padding(Dimens.Large),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+            Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(Dimens.Large),
+            Arrangement.Center,
+            Alignment.CenterHorizontally,
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-            ) {
+            Row(Modifier.fillMaxWidth(), Arrangement.Center, Alignment.CenterVertically) {
                 Text(
-                    text = "Timer:",
+                    "Timer:",
+                    Modifier.width(Dimens.XXXLarge),
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.width(Dimens.XXXLarge),
                 )
                 Text(
-                    text = elapsed,
+                    elapsed,
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(start = Dimens.Small),
+                    MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.displayLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .padding(start = Dimens.Small),
                 )
             }
             Row(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = Dimens.Medium, bottom = Dimens.Medium),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = Dimens.Medium, bottom = Dimens.Medium),
+                Arrangement.Center,
+                Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "AI agent:",
+                    "AI agent:",
+                    Modifier.width(Dimens.XXXLarge),
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.width(Dimens.XXXLarge),
                 )
-                Column(modifier = Modifier.weight(1f)) {
+                Column(Modifier.weight(1f)) {
                     viewModel.agents.forEach { a ->
                         Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .selectable(
+                                    agent == a.name,
+                                    a.isEnabled(),
+                                    onClick = { agent = a.name },
+                                ),
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .selectable(
-                                        selected = agent == a.name,
-                                        onClick = { agent = a.name },
-                                        enabled = a.isEnabled(),
-                                    ),
                         ) {
                             RadioButton(
-                                selected = agent == a.name,
-                                onClick = { agent = a.name },
+                                agent == a.name,
+                                { agent = a.name },
                                 enabled = a.isEnabled(),
                             )
                             Text(
-                                text = a.name,
+                                a.name,
                                 color =
                                     LocalContentColor.current.takeIf { a.isEnabled() }
                                         ?: LocalContentColor.current.copy(alpha = 0.38f),
@@ -230,49 +221,43 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
                     }
                 }
             }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-            ) {
+            Row(Modifier.fillMaxWidth(), Arrangement.Center, Alignment.CenterVertically) {
                 Text(
-                    text = "Summary detail:",
+                    "Summary detail:",
+                    Modifier.width(96.dp),
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.width(96.dp),
                 )
                 Slider(
-                    value = detail,
-                    onValueChange = { detail = it },
+                    detail,
+                    { detail = it },
+                    Modifier.weight(1f),
                     valueRange = DETAIL_LOW..DETAIL_HIGH,
                     steps = 1,
-                    modifier = Modifier.weight(1f),
                 )
             }
             RecordButton()
             Text(
-                text =
-                    when (session.state) {
-                        State.IDLE -> "Oh, hi there!"
-                        State.RECORDING -> "Recording..."
-                        State.PAUSED -> "Paused."
-                        else -> "Done."
-                    },
+                when (session.state) {
+                    State.IDLE -> "Oh, hi there!"
+                    State.RECORDING -> "Recording..."
+                    State.PAUSED -> "Paused."
+                    else -> "Done."
+                },
+                Modifier.padding(top = Dimens.Large),
                 style = MaterialTheme.typography.headlineLarge,
-                modifier = Modifier.padding(top = Dimens.Large),
             )
         }
 
         if (loading) {
             Dialog(onDismissRequest = {}) {
                 Box(
-                    modifier =
-                        Modifier
-                            .size(100.dp)
-                            .background(
-                                MaterialTheme.colorScheme.surface,
-                                shape = RoundedCornerShape(Dimens.Small),
-                            ),
-                    contentAlignment = Alignment.Center,
+                    Modifier
+                        .size(100.dp)
+                        .background(
+                            MaterialTheme.colorScheme.surface,
+                            shape = RoundedCornerShape(Dimens.Small),
+                        ),
+                    Alignment.Center,
                 ) {
                     CircularProgressIndicator()
                 }
@@ -282,30 +267,26 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
         if (!showBottomSheet) {
             return@Scaffold
         }
-        ModalBottomSheet(
-            onDismissRequest = { showBottomSheet = false },
-            sheetState = sheetState,
-        ) {
+        ModalBottomSheet({ showBottomSheet = false }, sheetState = sheetState) {
             TopAppBar(
-                title = {
+                {
                     Column {
-                        Text(text = agent, style = MaterialTheme.typography.titleLarge)
+                        Text(agent, style = MaterialTheme.typography.titleLarge)
                         Text(
-                            text =
-                                "$elapsed (${
-                                    when (detail) {
-                                        DETAIL_LOW -> "Low"
-                                        DETAIL_MEDIUM -> "Medium"
-                                        else -> "High"
-                                    }
-                                })",
+                            "$elapsed (${
+                                when (detail) {
+                                    DETAIL_LOW -> "Low"
+                                    DETAIL_MEDIUM -> "Medium"
+                                    else -> "High"
+                                }
+                            })",
                             style = MaterialTheme.typography.titleSmall,
                         )
                     }
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = {
+                        {
                             scope
                                 .launch { sheetState.hide() }
                                 .invokeOnCompletion {
@@ -316,15 +297,15 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
                         },
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_close),
-                            contentDescription = "Close summary",
+                            painterResource(id = R.drawable.ic_close),
+                            "Close summary",
                             tint = MaterialTheme.colorScheme.primary,
                         )
                     }
                 },
                 actions = {
                     IconButton(
-                        onClick = {
+                        {
                             context.startActivity(
                                 Intent.createChooser(
                                     Intent().apply {
@@ -338,8 +319,8 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
                         },
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_share),
-                            contentDescription = "Share",
+                            painterResource(id = R.drawable.ic_share),
+                            "Share",
                             tint = MaterialTheme.colorScheme.secondary,
                         )
                     }
@@ -347,23 +328,22 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
                 colors = TopAppBarDefaults.topAppBarColors(Color.Transparent),
             )
             Column(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .verticalScroll(rememberScrollState())
-                        .padding(Dimens.Large),
+                Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .padding(Dimens.Large),
             ) {
                 LabelText("Summary")
                 Text(
-                    text = summary,
+                    summary,
+                    Modifier.padding(bottom = Dimens.Medium),
                     style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(bottom = Dimens.Medium),
                 )
                 LabelText("Transcription")
                 Text(
-                    text = transcription,
+                    transcription,
+                    Modifier.padding(bottom = Dimens.Medium),
                     style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(bottom = Dimens.Medium),
                 )
             }
         }
@@ -393,7 +373,7 @@ fun RecordButton(viewModel: MainViewModel = hiltViewModel()) {
     }
 
     LargeFloatingActionButton(
-        onClick = {
+        {
             Intent(context, MainService::class.java).let {
                 it.action = action
                 if (action == ACTION_START && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -403,23 +383,19 @@ fun RecordButton(viewModel: MainViewModel = hiltViewModel()) {
                 }
             }
         },
+        Modifier.padding(top = Dimens.XXXLarge),
         containerColor = MaterialTheme.colorScheme.secondary,
         contentColor = MaterialTheme.colorScheme.inverseOnSurface,
-        modifier = Modifier.padding(top = Dimens.XXXLarge),
     ) {
-        Icon(
-            painter = painterResource(id = iconId),
-            contentDescription = "Record button",
-            modifier = Modifier.size(Dimens.Large),
-        )
+        Icon(painterResource(id = iconId), "Record button", Modifier.size(Dimens.Large))
     }
 }
 
 @Composable
 private fun LabelText(text: String) =
     Text(
-        text = text,
+        text,
+        Modifier.padding(bottom = Dimens.Medium),
+        MaterialTheme.colorScheme.primary,
         style = MaterialTheme.typography.labelLarge,
-        color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(bottom = Dimens.Medium),
     )

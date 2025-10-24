@@ -13,20 +13,11 @@ import androidx.core.view.WindowCompat
 
 @Composable
 fun TwinMindTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            (view.context as? Activity)?.window?.let {
-                WindowCompat.getInsetsController(it, view).isAppearanceLightStatusBars = !darkTheme
-            }
-        }
-    }
-
     MaterialTheme(
         colorScheme =
             darkColorScheme(
-                primary = Colors.BlueMuted,
-                secondary = Colors.OrangeMuted,
+                primary = Colors.BlueVibrant,
+                secondary = Colors.OrangeVibrant,
             ).takeIf { darkTheme }
                 ?: lightColorScheme(
                     primary = Colors.Blue,
@@ -35,4 +26,16 @@ fun TwinMindTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composab
         typography = Typography(),
         content = content,
     )
+
+    val view =
+        LocalView.current
+            .takeIf { !it.isInEditMode }
+            ?: return
+    SideEffect {
+        (view.context as? Activity)?.window?.let {
+            WindowCompat
+                .getInsetsController(it, view)
+                .isAppearanceLightStatusBars = !darkTheme
+        }
+    }
 }

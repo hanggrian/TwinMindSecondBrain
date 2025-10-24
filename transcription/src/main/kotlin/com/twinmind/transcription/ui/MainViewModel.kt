@@ -7,7 +7,6 @@ import com.twinmind.transcription.db.Chunks
 import com.twinmind.transcription.sync.Session
 import com.twinmind.transcription.sync.SessionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.ktor.utils.io.bits.of
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -32,7 +31,7 @@ class MainViewModel
 
         val errorFlow = MutableStateFlow("")
 
-        val elapsedTimeFlow: Flow<String> =
+        val elapsedTimeFlow =
             sessionRepository.flow.map {
                 val seconds = (it.elapsedTime / 1000) % 60
                 val minutes = (it.elapsedTime / (1000 * 60)) % 60
@@ -44,14 +43,14 @@ class MainViewModel
                 }
             }
 
-        val sessionFlow: StateFlow<Session> =
+        val sessionFlow =
             sessionRepository.flow.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000),
                 initialValue = Session(),
             )
 
-        val agents: Collection<Agent> = agentMap.values
+        val agents: Collection<Agent> get() = agentMap.values
 
         fun getAgent(name: String): Agent = agentMap[name] ?: error("Agent not found: $name")
 

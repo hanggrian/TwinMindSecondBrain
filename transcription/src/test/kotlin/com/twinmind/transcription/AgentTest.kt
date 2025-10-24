@@ -39,6 +39,8 @@ class AgentTest {
 
     @Inject lateinit var chunks: Chunks
 
+    @Inject lateinit var fakeAgent: FakeAgent
+
     @get:Rule var hiltRule = HiltAndroidRule(this)
 
     private lateinit var mocks: AutoCloseable
@@ -68,7 +70,7 @@ class AgentTest {
         val (collection, summary) =
             runBlocking(Dispatchers.IO) {
                 val results = chunks.getAll()
-                results to FakeAgent().transcribe(results, DETAIL_LOW, loading, error)
+                results to fakeAgent.transcribe(results, DETAIL_LOW, loading, error)
             }
         collection.forEach {
             assertThat(it.status).isEqualTo(ChunkStatus.TRANSCRIBED)
